@@ -28,8 +28,8 @@
             padding: 0 20px;
         }
 
-        .nav-links span { margin-right: 20px; cursor: pointer; color: #8b949e; }
-        .nav-links .active { color: var(--accent); font-weight: bold; }
+        .nav-links span { margin: 0 10px; cursor: pointer; color: #8b949e; }
+        .nav-links .active { color: var(--accent); font-weight: bold; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
         
         .oracle-btn {
             background: var(--accent); color: white;
@@ -46,6 +46,28 @@
         .sidebar { background: var(--panel-bg); border-right: 1px solid var(--border); padding: 20px; }
         .editor-area { display: flex; flex-direction: column; background: var(--bg-color); }
         .tools-panel { background: var(--panel-bg); border-left: 1px solid var(--border); padding: 20px; }
+
+        /* Стили вкладок */
+        .tabs-bar {
+            display: flex;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #8b949e;
+            border-right: 1px solid var(--border);
+            transition: 0.2s;
+        }
+
+        .tab-item.active {
+            background: var(--bg-color);
+            color: var(--text-color);
+            border-bottom: 2px solid var(--accent);
+        }
 
         .chat-input-container {
             padding: 20px; border-top: 1px solid var(--border);
@@ -69,7 +91,7 @@
         pre { 
             margin: 0; padding: 20px; color: #d2a8ff; 
             font-family: 'Consolas', monospace; font-size: 14px;
-            white-space: pre-wrap; word-wrap: break-word;
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -83,7 +105,7 @@
         <span>Settings</span>
     </div>
     <div>
-        <span>Hi, Engineer!</span>
+        <span style="margin-right: 10px;">Hi, Engineer!</span>
         <button class="oracle-btn">Try Oracle Intelligence</button>
     </div>
 </header>
@@ -92,7 +114,7 @@
     <aside class="sidebar">
         <h3>My Pack</h3>
         <div class="pack-preview">Photo Preview</div>
-        <div id="pack-name-display" style="font-weight: bold;">NamePack.wordpack</div>
+        <div id="pack-name-sidebar" style="font-weight: bold;">NamePack.worldpack</div>
         <p style="color: #8b949e; font-size: 14px;">Version: V003</p>
         <hr style="border: 0; border-top: 1px solid var(--border);">
         <h4>Rooms</h4>
@@ -100,8 +122,22 @@
     </aside>
 
     <main class="editor-area">
-        <div style="flex: 1; overflow-y: auto;">
-            <pre id="json-display">// Здесь будет ваш "миллиард символов"...</pre>
+        <!-- Новая навигация вкладок -->
+        <div class="tabs-bar">
+            <div id="tab-code" class="tab-item active">📄 <span id="tab-filename">Untitled.worldpack</span></div>
+            <div id="tab-oracle" class="tab-item">🧠 Oracle Intelligence</div>
+        </div>
+
+        <div id="content-code" style="flex: 1; overflow-y: auto;">
+            <pre id="json-display">// Загрузите ваш пак через "Upload from Device"...</pre>
+        </div>
+
+        <div id="content-oracle" style="flex: 1; padding: 20px; display: none; overflow-y: auto;">
+            <h2 style="color: var(--accent);">Oracle Intelligence System</h2>
+            <p>Статус: Premium Активен 🔑)</p>
+            <div style="background: #1c2128; padding: 15px; border-radius: 8px; border: 1px solid var(--accent);">
+                <p>💡 Анализ кода: Ошибок не обнаружено. Все GUID синхронизированы.</p>
+            </div>
         </div>
         
         <div class="chat-input-container">
@@ -109,7 +145,7 @@
             <div class="quick-actions">
                 <div class="chip" id="select-pack-btn">+ Select Pack</div>
                 <div class="chip">🖼 Create Image</div>
-                <div class="chip">🔑 Try Full Oracle (Premium)</div>
+                <div class="chip" id="premium-btn">🔑 Try Full Oracle (Premium)</div>
             </div>
         </div>
     </main>
@@ -118,15 +154,13 @@
         <h3>Studio</h3>
         <div style="display: flex; flex-direction: column; gap: 10px;">
             <button id="upload-btn" style="width: 100%; padding: 10px; cursor: pointer;">⬆ Upload from Device</button>
-            <button id="download-btn" style="width: 100%; padding: 10px; cursor: pointer; background: #238636; color: white; border: none; border-radius: 6px;">📥 Download .worldpack</button>
+            <button id="download-btn" style="background: #238636; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer;">📥 Download .worldpack</button>
         </div>
         <h4 style="margin-top: 30px;">Create Ideas</h4>
-        <textarea id="idea-text" style="width: 100%; background: #0d1117; color: white; border: 1px solid var(--border); border-radius: 6px; height: 100px; padding: 10px;" placeholder="Write idea..."></textarea>
+        <textarea id="idea-text" style="width: 100%; background: #0d1117; color: white; border: 1px solid var(--border); border-radius: 6px; height: 100px; padding: 10px;" placeholder="Напишите идею..."></textarea>
     </aside>
 </div>
 
-<!-- Подключение твоего внешнего скрипта -->
 <script src="script.js"></script>
-
 </body>
 </html>
