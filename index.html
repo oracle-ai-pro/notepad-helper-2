@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notepad Helper Developers | LMSH</title>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --panel-bg: #161b22;
+            --text-color: #e6edf3;
+            --accent: #2f81f7;
+            --border: #30363d;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            overflow: hidden;
+        }
+
+        /* Навигация как на чертеже */
+        header {
+            height: 60px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .nav-links span { margin-right: 20px; cursor: pointer; color: #8b949e; }
+        .nav-links .active { color: var(--accent); font-weight: bold; }
+        
+        .oracle-btn {
+            background: var(--accent); color: white;
+            border: none; padding: 8px 16px; border-radius: 20px;
+            cursor: pointer; font-weight: bold;
+        }
+
+        /* Основной контейнер */
+        .main-container {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            height: calc(100vh - 60px);
+        }
+
+        /* Панели */
+        .sidebar { background: var(--panel-bg); border-right: 1px solid var(--border); padding: 20px; }
+        .editor-area { display: flex; flex-direction: column; background: var(--bg-color); }
+        .tools-panel { background: var(--panel-bg); border-left: 1px solid var(--border); padding: 20px; }
+
+        /* Поле ввода как в NotebookLM */
+        .chat-input-container {
+            padding: 20px; border-top: 1px solid var(--border);
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        input[type="text"] {
+            background: #0d1117; border: 1px solid var(--border);
+            color: white; padding: 12px; border-radius: 8px; width: 100%;
+        }
+
+        .pack-preview {
+            width: 100%; height: 150px; background: #30363d;
+            border-radius: 8px; margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .quick-actions { display: flex; gap: 10px; margin-top: 10px; }
+        .chip { background: #21262d; padding: 5px 12px; border-radius: 15px; font-size: 12px; border: 1px solid var(--border); cursor: pointer; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="font-weight: bold;">Notepad Helper Developers</div>
+    <div class="nav-links">
+        <span class="active">Home</span>
+        <span>Packs</span>
+        <span>Settings</span>
+    </div>
+    <div>
+        <span style="margin-right: 15px;">Hi, Engineer!</span>
+        <button class="oracle-btn">Try Oracle Intelligence</button>
+    </div>
+</header>
+
+<div class="main-container">
+    <aside class="sidebar">
+        <h3>My Pack</h3>
+        <div class="pack-preview">Photo Preview</div>
+        <div style="font-weight: bold;">NamePack.wordpack</div>
+        <p style="color: #8b949e; font-size: 14px;">Version: V003</p>
+        <hr style="border: 0; border-top: 1px solid var(--border);">
+        <h4>Rooms</h4>
+        <div class="chip">Room 1</div>
+    </aside>
+
+    <main class="editor-area">
+        <div style="flex: 1; padding: 20px; overflow-y: auto; color: #7d8590;">
+            <p>// Здесь будет отображаться структура твоего пака...</p>
+            <pre style="color: #d2a8ff;">{ "worldPackName": "All Pack Dates", ... }</pre>
+        </div>
+        
+        <div class="chat-input-container">
+            <input type="text" placeholder="Ask Oracle 2 or Write idea...">
+            <div class="quick-actions">
+                <div class="chip">+ Select Pack</div>
+                <div class="chip">🖼 Create Image</div>
+                <div class="chip">🔑 Try Full Oracle (Premium)</div>
+            </div>
+        </div>
+    </main>
+
+    <aside class="tools-panel">
+        <h3>Studio</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button style="width: 100%; padding: 10px; cursor: pointer;">⬆ Upload from Device</button>
+            <button style="width: 100%; padding: 10px; cursor: pointer; background: #238636; color: white; border: none; border-radius: 6px;">📥 Download .worldpack</button>
+        </div>
+        <h4 style="margin-top: 30px;">Create Ideas</h4>
+        <textarea style="width: 100%; background: #0d1117; color: white; border: 1px solid var(--border); border-radius: 6px; height: 100px; padding: 10px;" placeholder="Write idea..."></textarea>
+    </aside>
+</div>
+
+</body>
+</html>
