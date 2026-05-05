@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +15,11 @@
 
         body, html {
             margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg-color); color: var(--text-color);
             overflow: hidden;
         }
 
-        /* Навигация как на чертеже */
         header {
             height: 60px;
             background: var(--panel-bg);
@@ -38,19 +37,16 @@
             cursor: pointer; font-weight: bold;
         }
 
-        /* Основной контейнер */
         .main-container {
             display: grid;
             grid-template-columns: 280px 1fr 300px;
             height: calc(100vh - 60px);
         }
 
-        /* Панели */
         .sidebar { background: var(--panel-bg); border-right: 1px solid var(--border); padding: 20px; }
         .editor-area { display: flex; flex-direction: column; background: var(--bg-color); }
         .tools-panel { background: var(--panel-bg); border-left: 1px solid var(--border); padding: 20px; }
 
-        /* Поле ввода как в NotebookLM */
         .chat-input-container {
             padding: 20px; border-top: 1px solid var(--border);
             display: flex; flex-direction: column; gap: 10px;
@@ -70,6 +66,11 @@
         .quick-actions { display: flex; gap: 10px; margin-top: 10px; }
         .chip { background: #21262d; padding: 5px 12px; border-radius: 15px; font-size: 12px; border: 1px solid var(--border); cursor: pointer; }
 
+        pre { 
+            margin: 0; padding: 20px; color: #d2a8ff; 
+            font-family: 'Consolas', monospace; font-size: 14px;
+            white-space: pre-wrap; word-wrap: break-word;
+        }
     </style>
 </head>
 <body>
@@ -82,7 +83,7 @@
         <span>Settings</span>
     </div>
     <div>
-        <span style="margin-right: 15px;">Hi, Engineer!</span>
+        <span>Hi, Engineer!</span>
         <button class="oracle-btn">Try Oracle Intelligence</button>
     </div>
 </header>
@@ -91,7 +92,7 @@
     <aside class="sidebar">
         <h3>My Pack</h3>
         <div class="pack-preview">Photo Preview</div>
-        <div style="font-weight: bold;">NamePack.wordpack</div>
+        <div id="pack-name-display" style="font-weight: bold;">NamePack.wordpack</div>
         <p style="color: #8b949e; font-size: 14px;">Version: V003</p>
         <hr style="border: 0; border-top: 1px solid var(--border);">
         <h4>Rooms</h4>
@@ -99,15 +100,14 @@
     </aside>
 
     <main class="editor-area">
-        <div style="flex: 1; padding: 20px; overflow-y: auto; color: #7d8590;">
-            <p>// Здесь будет отображаться структура твоего пака...</p>
-            <pre style="color: #d2a8ff;">{ "worldPackName": "All Pack Dates", ... }</pre>
+        <div style="flex: 1; overflow-y: auto;">
+            <pre id="json-display">// Здесь будет ваш "миллиард символов"...</pre>
         </div>
         
         <div class="chat-input-container">
-            <input type="text" placeholder="Ask Oracle 2 or Write idea...">
+            <input type="text" id="oracle-input" placeholder="Ask Oracle 2 or Write idea...">
             <div class="quick-actions">
-                <div class="chip">+ Select Pack</div>
+                <div class="chip" id="select-pack-btn">+ Select Pack</div>
                 <div class="chip">🖼 Create Image</div>
                 <div class="chip">🔑 Try Full Oracle (Premium)</div>
             </div>
@@ -117,13 +117,16 @@
     <aside class="tools-panel">
         <h3>Studio</h3>
         <div style="display: flex; flex-direction: column; gap: 10px;">
-            <button style="width: 100%; padding: 10px; cursor: pointer;">⬆ Upload from Device</button>
-            <button style="width: 100%; padding: 10px; cursor: pointer; background: #238636; color: white; border: none; border-radius: 6px;">📥 Download .worldpack</button>
+            <button id="upload-btn" style="width: 100%; padding: 10px; cursor: pointer;">⬆ Upload from Device</button>
+            <button id="download-btn" style="width: 100%; padding: 10px; cursor: pointer; background: #238636; color: white; border: none; border-radius: 6px;">📥 Download .worldpack</button>
         </div>
         <h4 style="margin-top: 30px;">Create Ideas</h4>
-        <textarea style="width: 100%; background: #0d1117; color: white; border: 1px solid var(--border); border-radius: 6px; height: 100px; padding: 10px;" placeholder="Write idea..."></textarea>
+        <textarea id="idea-text" style="width: 100%; background: #0d1117; color: white; border: 1px solid var(--border); border-radius: 6px; height: 100px; padding: 10px;" placeholder="Write idea..."></textarea>
     </aside>
 </div>
+
+<!-- Подключение твоего внешнего скрипта -->
 <script src="script.js"></script>
+
 </body>
 </html>
