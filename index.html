@@ -16,7 +16,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -27,133 +27,105 @@
             overflow: hidden;
         }
 
-        /* ИСПРАВЛЕННЫЙ СКРОЛЛ */
-        .scrollable {
-            overflow-y: auto !important; /* Принудительный скролл */
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--bg-color);
-        }
-
+        /* Кастомный скролл */
+        .scrollable { overflow-y: auto !important; }
         .scrollable::-webkit-scrollbar { width: 8px; }
         .scrollable::-webkit-scrollbar-track { background: var(--bg-color); }
-        .scrollable::-webkit-scrollbar-thumb { 
-            background-color: var(--border); 
-            border-radius: 10px; 
-            border: 2px solid var(--bg-color);
-        }
-        .scrollable::-webkit-scrollbar-thumb:hover { background-color: var(--accent); }
+        .scrollable::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; border: 2px solid var(--bg-color); }
+        .scrollable::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         header {
             height: 60px; background: var(--panel-bg);
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 20px; animation: fadeIn 0.5s ease-out;
         }
 
         .main-container {
-            display: grid;
-            grid-template-columns: 280px 1fr 300px;
-            height: calc(100vh - 60px);
+            display: grid; grid-template-columns: 280px 1fr 300px;
+            height: calc(100vh - 60px); animation: fadeIn 0.7s ease-out;
         }
 
         .sidebar, .tools-panel { background: var(--panel-bg); padding: 20px; }
         .sidebar { border-right: 1px solid var(--border); }
         .tools-panel { border-left: 1px solid var(--border); }
 
-        .editor-area { display: flex; flex-direction: column; background: var(--bg-color); position: relative; }
-        
         .tabs-bar { display: flex; background: var(--panel-bg); border-bottom: 1px solid var(--border); }
-        .tab-item { padding: 10px 20px; cursor: pointer; color: #8b949e; border-bottom: 2px solid transparent; }
+        .tab-item { padding: 12px 20px; cursor: pointer; color: #8b949e; border-bottom: 2px solid transparent; transition: 0.3s; }
         .tab-item.active { color: var(--text-color); border-bottom-color: var(--accent); }
 
-        /* ОБЛАСТЬ КОДА С РЕДАКТИРОВАНИЕМ */
-        #content-code { flex: 1; position: relative; background: #0d1117; }
+        #content-code { flex: 1; background: #0d1117; }
         #json-display {
             margin: 0; padding: 20px; color: #d2a8ff;
             font-family: 'Consolas', monospace; font-size: 14px;
-            outline: none; white-space: pre-wrap;
-            width: 100%; height: 100%; box-sizing: border-box;
-            display: block;
+            outline: none; white-space: pre-wrap; width: 100%; height: 100%; box-sizing: border-box;
         }
 
         .chat-input-container { padding: 20px; border-top: 1px solid var(--border); }
         .chat-wrapper { position: relative; display: flex; align-items: center; }
-        
         input[type="text"] {
-            background: #0d1117; border: 1px solid var(--border);
-            color: white; padding: 12px 45px 12px 15px;
-            border-radius: var(--radius-md); width: 100%; outline: none;
+            background: #0d1117; border: 1px solid var(--border); color: white;
+            padding: 12px 45px 12px 15px; border-radius: var(--radius-md); width: 100%; outline: none;
         }
+        #send-btn { position: absolute; right: 12px; background: none; border: none; color: var(--accent); cursor: pointer; font-size: 20px; transition: 0.2s; }
+        #send-btn:hover { transform: scale(1.2) translateX(3px); }
 
-        #send-btn {
-            position: absolute; right: 10px; background: none; border: none;
-            color: var(--accent); cursor: pointer; font-size: 20px;
-        }
+        .world-box { background: #21262d; padding: 12px; border-radius: var(--radius-md); margin-top: 10px; border: 1px solid var(--border); }
+        .room-item { margin-left: 15px; color: #8b949e; font-size: 13px; margin-top: 8px; cursor: pointer; }
+        .room-item:hover { color: var(--accent); }
 
-        .world-box { background: #21262d; padding: 10px; border-radius: var(--radius-md); margin-top: 10px; }
-        .room-link { margin-left: 15px; display: block; color: #8b949e; text-decoration: none; font-size: 13px; margin-top: 5px; }
-        
         textarea {
             width: 100%; height: 150px; background: #0d1117; color: white;
-            border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px;
-            resize: none; outline: none;
+            border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px; resize: none; outline: none;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div style="font-weight: bold; font-size: 18px;">LMSH <span style="color: #8b949e; font-weight: normal;">Notepad Helper 2</span></div>
+        <button style="background:var(--accent); color:white; border:none; padding:8px 20px; border-radius:20px; font-weight: bold;">Oracle Premium</button>
+    </header>
 
-<header>
-    <div style="font-weight: bold;">LMSH Studio 2.0</div>
-    <div class="nav-links">
-        <span class="active">Home</span>
-        <span>Packs</span>
-    </div>
-    <button style="background:var(--accent); color:white; border:none; padding:8px 15px; border-radius:20px;">Oracle Online</button>
-</header>
-
-<div class="main-container">
-    <aside class="sidebar scrollable">
-        <h3>My Pack</h3>
-        <div id="pack-name-sidebar" style="font-weight: bold; margin-bottom: 20px;">NamePack.worldpack</div>
-        <h4>Worlds & Hierarchy</h4>
-        <div class="world-box">
-            <span>🌍 World 1</span>
-            <a href="#" class="room-link">🚪 Room 1 (Spawn)</a>
-            <a href="#" class="room-link">🚪 Room 2 (Lab)</a>
-        </div>
-    </aside>
-
-    <main class="editor-area">
-        <div class="tabs-bar">
-            <div id="tab-code" class="tab-item active">📄 Code</div>
-            <div id="tab-oracle" class="tab-item">🧠 Oracle</div>
-        </div>
-
-        <!-- contenteditable="true" позволяет РЕДАКТИРОВАТЬ код прямо в браузере -->
-        <div id="content-code" class="scrollable">
-            <pre id="json-display" contenteditable="true">// Вставьте код или загрузите файл...</pre>
-        </div>
-
-        <div id="content-oracle" class="scrollable" style="display:none; padding:20px;">
-            <div id="oracle-messages"></div>
-        </div>
-        
-        <div class="chat-input-container">
-            <div class="chat-wrapper">
-                <input type="text" id="oracle-input" placeholder="Спросить Оракула...">
-                <button id="send-btn">➔</button>
+    <div class="main-container">
+        <aside class="sidebar scrollable">
+            <h3>My Pack</h3>
+            <div style="width: 100%; height: 150px; background: #30363d; border-radius: var(--radius-lg); margin-bottom: 15px; display: flex; align-items: center; justify-content: center;">Photo Preview</div>
+            <div id="pack-name-sidebar" style="font-weight: bold;">NamePack.worldpack</div>
+            <p style="color: #8b949e; font-size: 12px;">Version: V003</p>
+            
+            <h4 style="margin-top: 30px;">Worlds & Hierarchy</h4>
+            <div class="world-box">
+                <b>🌍 World 1</b>
+                <div class="room-item">🚪 Room 1 (Spawn)</div>
+                <div class="room-item">🚪 Room 2 (Lab)</div>
             </div>
-        </div>
-    </main>
+        </aside>
 
-    <aside class="tools-panel">
-        <h4>Creative Ideas</h4>
-        <!-- Правая колонка для идей -->
-        <textarea id="idea-text" placeholder="Мурзик, запиши: добавить вокал Снежинки в 3-ю комнату..."></textarea>
-        <button id="upload-btn" style="width:100%; margin-top:10px; padding:10px; cursor:pointer;">⬆ Загрузить Пак</button>
-    </aside>
-</div>
+        <main style="display:flex; flex-direction:column;">
+            <div class="tabs-bar">
+                <div id="tab-code" class="tab-item active">📄 Code View</div>
+                <div id="tab-oracle" class="tab-item">🧠 Oracle Intelligence</div>
+            </div>
+            <div id="content-code" class="scrollable">
+                <pre id="json-display" contenteditable="true">// Вставьте код или загрузите .worldpack файл...</pre>
+            </div>
+            <div id="content-oracle" class="scrollable" style="display:none; padding:30px;">
+                <div id="oracle-messages"></div>
+            </div>
+            <div class="chat-input-container">
+                <div class="chat-wrapper">
+                    <input type="text" id="oracle-input" placeholder="Спросить Оракула 2...">
+                    <button id="send-btn">➔</button>
+                </div>
+            </div>
+        </main>
 
-<script src="script.js"></script>
+        <aside class="tools-panel">
+            <h4>Creative Ideas</h4>
+            <textarea id="idea-text" placeholder="Заметки для Мурзика и Ламирка..."></textarea>
+            <button id="upload-btn" style="width:100%; margin-top:15px; padding:12px; border-radius:var(--radius-md); background:#21262d; color:white; border:1px solid var(--border); cursor:pointer;">⬆ Upload File</button>
+        </aside>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
