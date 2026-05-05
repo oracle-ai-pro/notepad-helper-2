@@ -11,139 +11,187 @@
             --text-color: #e6edf3;
             --accent: #2f81f7;
             --border: #30363d;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+        }
+
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color); color: var(--text-color);
             overflow: hidden;
         }
+
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         header {
             height: 60px;
             background: var(--panel-bg);
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 24px;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .nav-links span { margin: 0 10px; cursor: pointer; color: #8b949e; }
-        .nav-links .active { color: var(--accent); font-weight: bold; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
-        
+        .nav-links span { margin: 0 12px; cursor: pointer; color: #8b949e; transition: 0.3s; font-size: 14px; }
+        .nav-links .active { color: var(--accent); font-weight: 600; }
+
         .oracle-btn {
             background: var(--accent); color: white;
-            border: none; padding: 8px 16px; border-radius: 20px;
-            cursor: pointer; font-weight: bold;
+            border: none; padding: 8px 20px; border-radius: 20px;
+            cursor: pointer; font-weight: bold; transition: 0.3s;
         }
+        .oracle-btn:hover { filter: brightness(1.2); box-shadow: 0 0 15px rgba(47, 129, 247, 0.4); }
 
         .main-container {
             display: grid;
             grid-template-columns: 280px 1fr 300px;
             height: calc(100vh - 60px);
+            animation: fadeIn 0.6s ease-out;
         }
 
-        .sidebar { background: var(--panel-bg); border-right: 1px solid var(--border); padding: 20px; }
-        .editor-area { display: flex; flex-direction: column; background: var(--bg-color); }
-        .tools-panel { background: var(--panel-bg); border-left: 1px solid var(--border); padding: 20px; }
-
-        /* Стили вкладок */
-        .tabs-bar {
-            display: flex;
-            background: var(--panel-bg);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tab-item {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #8b949e;
-            border-right: 1px solid var(--border);
-            transition: 0.2s;
-        }
-
-        .tab-item.active {
-            background: var(--bg-color);
-            color: var(--text-color);
-            border-bottom: 2px solid var(--accent);
-        }
-
-        .chat-input-container {
-            padding: 20px; border-top: 1px solid var(--border);
-            display: flex; flex-direction: column; gap: 10px;
-        }
-
-        input[type="text"] {
-            background: #0d1117; border: 1px solid var(--border);
-            color: white; padding: 12px; border-radius: 8px; width: 100%;
-        }
-
-        .pack-preview {
-            width: 100%; height: 150px; background: #30363d;
-            border-radius: 8px; margin-bottom: 15px;
+        /* Sidebar Styles */
+        .sidebar { background: var(--panel-bg); border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; }
+        .pack-preview-container {
+            width: 100%; height: 150px; background: #0d1117;
+            border-radius: var(--radius-lg); margin-bottom: 16px;
+            overflow: hidden; border: 1px solid var(--border);
             display: flex; align-items: center; justify-content: center;
         }
+        #pack-image { width: 100%; height: 100%; object-fit: cover; }
 
-        .quick-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .chip { background: #21262d; padding: 5px 12px; border-radius: 15px; font-size: 12px; border: 1px solid var(--border); cursor: pointer; }
+        .world-box {
+            background: #0d1117; border-radius: var(--radius-md);
+            padding: 10px; margin-top: 12px; border: 1px solid var(--border);
+        }
+        .room-item {
+            margin-left: 15px; margin-top: 8px; font-size: 13px; color: #8b949e;
+            cursor: pointer; transition: 0.2s; padding: 4px 8px; border-radius: 4px;
+        }
+        .room-item:hover { background: #21262d; color: var(--accent); }
 
-        pre { 
-            margin: 0; padding: 20px; color: #d2a8ff; 
-            font-family: 'Consolas', monospace; font-size: 14px;
-            white-space: pre-wrap;
+        /* Editor Area */
+        .editor-area { display: flex; flex-direction: column; background: var(--bg-color); }
+        .tabs-bar { display: flex; background: var(--panel-bg); border-bottom: 1px solid var(--border); padding: 0 10px; }
+        .tab-item {
+            padding: 12px 16px; cursor: pointer; font-size: 13px; color: #8b949e;
+            border-bottom: 2px solid transparent; transition: 0.3s;
+        }
+        .tab-item.active { color: var(--text-color); border-bottom: 2px solid var(--accent); }
+
+        #content-code { flex: 1; overflow-y: auto; background: #0d1117; }
+        pre { margin: 0; padding: 20px; color: #d2a8ff; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.5; }
+
+        /* Chat UI */
+        .chat-input-container { padding: 20px; border-top: 1px solid var(--border); }
+        .chat-input-wrapper {
+            position: relative; display: flex; align-items: center;
+            background: #0d1117; border-radius: var(--radius-md); border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+        .chat-input-wrapper:focus-within { border-color: var(--accent); box-shadow: 0 0 10px rgba(47, 129, 247, 0.2); }
+
+        input[type="text"] {
+            background: transparent; border: none; color: white;
+            padding: 14px; padding-right: 50px; width: 100%; outline: none;
+        }
+        #send-btn {
+            position: absolute; right: 12px; background: none; border: none;
+            color: var(--accent); cursor: pointer; font-size: 18px; transition: 0.2s;
+        }
+        #send-btn:hover { transform: translateX(3px); }
+
+        /* Chips */
+        .quick-actions { display: flex; gap: 8px; margin-top: 12px; }
+        .chip {
+            background: #21262d; padding: 6px 14px; border-radius: 20px;
+            font-size: 12px; border: 1px solid var(--border); cursor: pointer; transition: 0.3s;
+        }
+        .chip:hover { background: #30363d; border-color: #8b949e; }
+
+        /* Tools Panel */
+        .tools-panel { background: var(--panel-bg); border-left: 1px solid var(--border); padding: 20px; }
+        .tool-btn {
+            width: 100%; padding: 12px; margin-bottom: 12px; border-radius: var(--radius-sm);
+            border: 1px solid var(--border); background: #21262d; color: white;
+            cursor: pointer; font-weight: 500; transition: 0.3s;
+        }
+        .tool-btn:hover { background: #30363d; }
+        .btn-success { background: #238636; border: none; }
+        .btn-success:hover { background: #2ea043; }
+
+        textarea {
+            width: 100%; background: #0d1117; color: white; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); height: 120px; padding: 12px; outline: none; resize: none;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: bold;">Notepad Helper Developers</div>
+    <div style="font-weight: 800; font-size: 18px; letter-spacing: -0.5px;">LMSH <span style="font-weight: 300; color: #8b949e;">Studio</span></div>
     <div class="nav-links">
         <span class="active">Home</span>
         <span>Packs</span>
         <span>Settings</span>
     </div>
     <div>
-        <span style="margin-right: 10px;">Hi, Engineer!</span>
-        <button class="oracle-btn">Try Oracle Intelligence</button>
+        <button class="oracle-btn">Oracle Intelligence</button>
     </div>
 </header>
 
 <div class="main-container">
     <aside class="sidebar">
-        <h3>My Pack</h3>
-        <div class="pack-preview">Photo Preview</div>
-        <div id="pack-name-sidebar" style="font-weight: bold;">NamePack.worldpack</div>
-        <p style="color: #8b949e; font-size: 14px;">Version: V003</p>
-        <hr style="border: 0; border-top: 1px solid var(--border);">
-        <h4>Rooms</h4>
-        <div class="chip">Room 1</div>
+        <div class="pack-preview-container">
+            <img id="pack-image" src="https://via.placeholder.com/280x150/161b22/e6edf3?text=Photo+Preview" alt="Pack Preview">
+        </div>
+        <h3 id="pack-name-sidebar" style="margin: 0; font-size: 16px;">NamePack.worldpack</h3>
+        <p style="color: #8b949e; font-size: 12px; margin-bottom: 24px;">Version: V003</p>
+        
+        <h4 style="font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px;">Worlds & Hierarchy</h4>
+        <div class="world-box">
+            <div style="font-size: 14px; font-weight: 600;">🌍 World 1</div>
+            <div class="room-item">🚪 Room 1</div>
+            <div class="room-item">🚪 Room 2</div>
+        </div>
     </aside>
 
     <main class="editor-area">
-        <!-- Новая навигация вкладок -->
         <div class="tabs-bar">
-            <div id="tab-code" class="tab-item active">📄 <span id="tab-filename">Untitled.worldpack</span></div>
+            <div id="tab-code" class="tab-item active">📄 <span id="tab-filename">Traitor_Level_2.1.txt</span></div>
             <div id="tab-oracle" class="tab-item">🧠 Oracle Intelligence</div>
         </div>
 
-        <div id="content-code" style="flex: 1; overflow-y: auto;">
+        <div id="content-code" style="flex: 1;">
             <pre id="json-display">// Загрузите ваш пак через "Upload from Device"...</pre>
         </div>
 
-        <div id="content-oracle" style="flex: 1; padding: 20px; display: none; overflow-y: auto;">
-            <h2 style="color: var(--accent);">Oracle Intelligence System</h2>
-            <p>Статус: Premium Активен 🔑)</p>
-            <div style="background: #1c2128; padding: 15px; border-radius: 8px; border: 1px solid var(--accent);">
-                <p>💡 Анализ кода: Ошибок не обнаружено. Все GUID синхронизированы.</p>
+        <div id="content-oracle" style="flex: 1; padding: 30px; display: none; animation: fadeIn 0.4s ease-out;">
+            <h2 style="color: var(--accent); margin-top: 0;">Oracle Intelligence System</h2>
+            <div style="background: rgba(47, 129, 247, 0.1); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--accent);">
+                <p>🔑 <b>Status: Premium Active</b></p>
+                <p style="color: #8b949e; font-size: 14px;">Система готова к анализу "миллиарда символов". Ожидание данных...</p>
             </div>
         </div>
         
         <div class="chat-input-container">
-            <input type="text" id="oracle-input" placeholder="Ask Oracle 2 or Write idea...">
+            <div class="chat-input-wrapper">
+                <input type="text" id="oracle-input" placeholder="Ask Oracle 2 or Write idea...">
+                <button id="send-btn">➔</button>
+            </div>
             <div class="quick-actions">
-                <div class="chip" id="select-pack-btn">+ Select Pack</div>
+                <div class="chip">+ Select Pack</div>
                 <div class="chip">🖼 Create Image</div>
                 <div class="chip" id="premium-btn">🔑 Try Full Oracle (Premium)</div>
             </div>
@@ -151,13 +199,12 @@
     </main>
 
     <aside class="tools-panel">
-        <h3>Studio</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <button id="upload-btn" style="width: 100%; padding: 10px; cursor: pointer;">⬆ Upload from Device</button>
-            <button id="download-btn" style="background: #238636; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer;">📥 Download .worldpack</button>
-        </div>
-        <h4 style="margin-top: 30px;">Create Ideas</h4>
-        <textarea id="idea-text" style="width: 100%; background: #0d1117; color: white; border: 1px solid var(--border); border-radius: 6px; height: 100px; padding: 10px;" placeholder="Напишите идею..."></textarea>
+        <h4 style="margin-top: 0;">Studio Tools</h4>
+        <button id="upload-btn" class="tool-btn">⬆ Upload from Device</button>
+        <button id="download-btn" class="tool-btn btn-success">📥 Download .worldpack</button>
+        
+        <h4 style="margin-top: 32px;">Creative Engine</h4>
+        <textarea id="idea-text" placeholder="Запишите идею для Ламирка или Снежинки..."></textarea>
     </aside>
 </div>
 
