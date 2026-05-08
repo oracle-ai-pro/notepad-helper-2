@@ -1,131 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notepad Helper Developers | LMSH</title>
+    <title>Notepad Helper 2 | Oracle Pro</title>
     <style>
         :root {
-            --bg-color: #0b0e14;
-            --panel-bg: #161b22;
-            --text-color: #e6edf3;
-            --accent: #2f81f7;
-            --border: #30363d;
-            --radius-lg: 16px;
-            --radius-md: 12px;
+            --cyan: #00ffff;
+            --purple: #8a2be2;
+            --deep-dark: #050508;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --accent-gradient: linear-gradient(135deg, var(--cyan), var(--purple));
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-color); color: var(--text-color);
+        * { box-sizing: border-box; }
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            background: var(--deep-dark); 
+            color: #e0e0e0; 
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             overflow: hidden;
         }
 
-        /* Кастомный скролл */
-        .scrollable { overflow-y: auto !important; }
-        .scrollable::-webkit-scrollbar { width: 8px; }
-        .scrollable::-webkit-scrollbar-track { background: var(--bg-color); }
-        .scrollable::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; border: 2px solid var(--bg-color); }
-        .scrollable::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-        header {
-            height: 60px; background: var(--panel-bg);
-            border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; animation: fadeIn 0.5s ease-out;
+        /* Анимированный фон */
+        .bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050508 100%);
+            z-index: -1;
         }
 
-        .main-container {
-            display: grid; grid-template-columns: 280px 1fr 300px;
-            height: calc(100vh - 60px); animation: fadeIn 0.7s ease-out;
+        /* Главный контейнер */
+        #app-shell {
+            display: flex; height: 100vh; padding: 20px; gap: 20px;
         }
 
-        .sidebar, .tools-panel { background: var(--panel-bg); padding: 20px; }
-        .sidebar { border-right: 1px solid var(--border); }
-        .tools-panel { border-left: 1px solid var(--border); }
-
-        .tabs-bar { display: flex; background: var(--panel-bg); border-bottom: 1px solid var(--border); }
-        .tab-item { padding: 12px 20px; cursor: pointer; color: #8b949e; border-bottom: 2px solid transparent; transition: 0.3s; }
-        .tab-item.active { color: var(--text-color); border-bottom-color: var(--accent); }
-
-        #content-code { flex: 1; background: #0d1117; }
-        #json-display {
-            margin: 0; padding: 20px; color: #d2a8ff;
-            font-family: 'Consolas', monospace; font-size: 14px;
-            outline: none; white-space: pre-wrap; width: 100%; height: 100%; box-sizing: border-box;
+        /* Левая панель (Миры) */
+        .sidebar {
+            width: 280px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
         }
 
-        .chat-input-container { padding: 20px; border-top: 1px solid var(--border); }
-        .chat-wrapper { position: relative; display: flex; align-items: center; }
+        .sidebar h2 { font-size: 1.1rem; color: var(--cyan); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Центр (Редактор) */
+        .editor-zone {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .editor-header {
+            height: 60px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            display: flex; align-items: center; padding: 0 20px;
+            justify-content: space-between;
+        }
+
+        #code-area {
+            flex: 1;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: #00ffcc;
+            font-family: 'Fira Code', monospace;
+            padding: 25px;
+            font-size: 14px;
+            line-height: 1.6;
+            outline: none;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        /* Fly Oracle (Правая панель) */
+        #oracle-fly {
+            width: 350px;
+            background: linear-gradient(180deg, rgba(15,15,25,0.95) 0%, rgba(5,5,10,0.98) 100%);
+            backdrop-filter: blur(30px);
+            border-left: 1px solid var(--purple);
+            box-shadow: -10px 0 50px rgba(0,0,0,0.8);
+            position: fixed; right: 0; top: 0; height: 100%;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            display: flex; flex-direction: column;
+        }
+
+        #oracle-fly.collapsed { transform: translateX(350px); }
+
+        .oracle-trigger {
+            position: absolute; left: -50px; top: 30px;
+            width: 50px; height: 50px;
+            background: var(--accent-gradient);
+            border-radius: 12px 0 0 12px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 24px;
+            box-shadow: -5px 0 15px rgba(138, 43, 226, 0.5);
+        }
+
+        /* Капля Оракула */
+        .drop-logo {
+            width: 80px; height: 80px;
+            margin: 40px auto 20px;
+            background: var(--accent-gradient);
+            border-radius: 50% 50% 50% 5%;
+            transform: rotate(-45deg);
+            animation: pulse-drop 3s infinite alternate;
+        }
+
+        @keyframes pulse-drop {
+            from { box-shadow: 0 0 20px var(--cyan); transform: rotate(-45deg) scale(1); }
+            to { box-shadow: 0 0 40px var(--purple); transform: rotate(-45deg) scale(1.05); }
+        }
+
+        .chat-box {
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 12px;
+        }
+
+        .msg { padding: 10px 15px; border-radius: 15px; max-width: 85%; line-height: 1.4; }
+        .ai { background: rgba(0, 255, 255, 0.1); border: 1px solid var(--cyan); align-self: flex-start; color: var(--cyan); }
+        .user { background: rgba(138, 43, 226, 0.1); border: 1px solid var(--purple); align-self: flex-end; color: #e0b0ff; }
+
+        .input-wrap { padding: 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
         input[type="text"] {
-            background: #0d1117; border: 1px solid var(--border); color: white;
-            padding: 12px 45px 12px 15px; border-radius: var(--radius-md); width: 100%; outline: none;
+            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            padding: 12px; border-radius: 12px; color: white;
         }
-        #send-btn { position: absolute; right: 12px; background: none; border: none; color: var(--accent); cursor: pointer; font-size: 20px; transition: 0.2s; }
-        #send-btn:hover { transform: scale(1.2) translateX(3px); }
 
-        .world-box { background: #21262d; padding: 12px; border-radius: var(--radius-md); margin-top: 10px; border: 1px solid var(--border); }
-        .room-item { margin-left: 15px; color: #8b949e; font-size: 13px; margin-top: 8px; cursor: pointer; }
-        .room-item:hover { color: var(--accent); }
-
-        textarea {
-            width: 100%; height: 150px; background: #0d1117; color: white;
-            border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px; resize: none; outline: none;
+        .banana-btn {
+            background: #ffcc00; color: black; border: none; padding: 10px 15px;
+            border-radius: 12px; font-weight: bold; cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div style="font-weight: bold; font-size: 18px;">LMSH <span style="color: #8b949e; font-weight: normal;">Notepad Helper 2</span></div>
-        <button style="background:var(--accent); color:white; border:none; padding:8px 20px; border-radius:20px; font-weight: bold;">Oracle Premium</button>
-    </header>
-
-    <div class="main-container">
-        <aside class="sidebar scrollable">
-            <h3>My Pack</h3>
-            <div style="width: 100%; height: 150px; background: #30363d; border-radius: var(--radius-lg); margin-bottom: 15px; display: flex; align-items: center; justify-content: center;">Photo Preview</div>
-            <div id="pack-name-sidebar" style="font-weight: bold;">NamePack.worldpack</div>
-            <p style="color: #8b949e; font-size: 12px;">Version: V003</p>
-            
-            <h4 style="margin-top: 30px;">Worlds & Hierarchy</h4>
-            <div class="world-box">
-                <b>🌍 World 1</b>
-                <div class="room-item">🚪 Room 1 (Spawn)</div>
-                <div class="room-item">🚪 Room 2 (Lab)</div>
+    <div class="bg-glow"></div>
+    
+    <div id="app-shell">
+        <aside class="sidebar">
+            <h2>LMSH Worlds</h2>
+            <div style="flex: 1; font-size: 0.9em; opacity: 0.6;">
+                📁 Traitor_Level_2.1<br>
+                📁 Kosmo_Circle_3.3<br>
+                📁 MIUI_Banana_MOD
+            </div>
+            <div id="auth-info" style="font-size: 0.7em; color: var(--purple);">
+                ID: lamirkmurziks... @oracle.com
             </div>
         </aside>
 
-        <main style="display:flex; flex-direction:column;">
-            <div class="tabs-bar">
-                <div id="tab-code" class="tab-item active">📄 Code View</div>
-                <div id="tab-oracle" class="tab-item">🧠 Oracle Intelligence</div>
-            </div>
-            <div id="content-code" class="scrollable">
-                <pre id="json-display" contenteditable="true">// Вставьте код или загрузите .worldpack файл...</pre>
-            </div>
-            <div id="content-oracle" class="scrollable" style="display:none; padding:30px;">
-                <div id="oracle-messages"></div>
-            </div>
-            <div class="chat-input-container">
-                <div class="chat-wrapper">
-                    <input type="text" id="oracle-input" placeholder="Спросить Оракула 2...">
-                    <button id="send-btn">➔</button>
-                </div>
-            </div>
+        <main class="editor-zone">
+            <header class="editor-header">
+                <div><strong>Notepad Helper 2</strong> <small style="color: var(--purple);">V003-GIT</small></div>
+                <button onclick="saveToGit()" style="background: var(--accent-gradient); border: none; color: white; padding: 8px 20px; border-radius: 10px; cursor: pointer;">Push to GitHub 🔑</button>
+            </header>
+            <textarea id="code-area" spellcheck="false">// Загрузка миллиарда символов...
+{
+  "pack": "MIUI Custom 🍌",
+  "status": "Prestige HQ",
+  "traitor_level": "2.1"
+}</textarea>
         </main>
-
-        <aside class="tools-panel">
-            <h4>Creative Ideas</h4>
-            <textarea id="idea-text" placeholder="Заметки для Мурзика и Ламирка..."></textarea>
-            <button id="upload-btn" style="width:100%; margin-top:15px; padding:12px; border-radius:var(--radius-md); background:#21262d; color:white; border:1px solid var(--border); cursor:pointer;">⬆ Upload File</button>
-        </aside>
     </div>
-    <script src="script.js"></script>
+
+    <div id="oracle-fly" class="collapsed">
+        <div class="oracle-trigger" onclick="toggleOracle()">🔑</div>
+        <div class="drop-logo"></div>
+        <div style="text-align: center; color: var(--cyan); font-weight: bold; letter-spacing: 1px;">ORACLE PRO 2.0</div>
+        
+        <div class="chat-box" id="chatBox">
+            <div class="msg ai">LMSH HQ: Ожидаю авторизацию. Пароль 20+ символов. 🔑)</div>
+        </div>
+
+        <div class="input-wrap">
+            <input type="text" id="userInput" placeholder="Команда для Оракула..." onkeypress="checkEnter(event)">
+            <button class="banana-btn" onclick="sendToOracle()">▶</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleOracle() {
+            document.getElementById('oracle-fly').classList.toggle('collapsed');
+        }
+
+        function sendToOracle() {
+            const input = document.getElementById('userInput');
+            const box = document.getElementById('chatBox');
+            if(!input.value) return;
+
+            // Добавляем сообщение пользователя
+            box.innerHTML += `<div class="msg user">${input.value}</div>`;
+            
+            const val = input.value.toLowerCase();
+            input.value = '';
+
+            // Реакция Оракула
+            setTimeout(() => {
+                let reply = "Запрос обработан. Данные синхронизированы с GitHub. 🔑)";
+                if(val.includes("банан") || val.includes("banana")) {
+                    reply = "🍌 АХАХАХА! БАНАН АКТИВИРОВАН! Чистка кода от кожуры завершена!";
+                }
+                if(val.includes("соседка")) {
+                    reply = "Тактический режим 'Денежная растяжка' активен. Жду 250€. 💰";
+                }
+                box.innerHTML += `<div class="msg ai">${reply}</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 800);
+        }
+
+        function checkEnter(e) { if(e.key === 'Enter') sendToOracle(); }
+
+        function saveToGit() {
+            alert("Коммит сформирован! Протокол LMSH-V003 отправляет данные в облако GitHub. 🔑)");
+        }
+    </script>
 </body>
 </html>
