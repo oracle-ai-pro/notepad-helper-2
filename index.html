@@ -15,10 +15,11 @@
             --grad: linear-gradient(90deg, #02b6ed 0%, #e60ced 100%);
             --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
         @keyframes bounce {
-    from { transform: scaleY(1); }
-    to { transform: scaleY(2); }
-}
+            from { transform: scaleY(1); }
+            to { transform: scaleY(2); }
+        }
 
         /* Кастомный скроллбар для стиля */
         ::-webkit-scrollbar { width: 4px; height: 4px; background: transparent; }
@@ -78,7 +79,7 @@
             border: 1px solid var(--border);
             color: var(--text);
             padding: 8px 16px;
-            border-radius: 14px; /* Закругление */
+            border-radius: 14px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
@@ -163,12 +164,12 @@
             pointer-events: none;
         }
 
-        /* ТАЙМЕР ОБРАТНОГО ОТСЧЕТА (ЗАКРУГЛЕННЫЙ) */
+        /* ТАЙМЕР ОБРАТНОГО ОТСЧЕТА */
         .countdown-container {
             background: rgba(13, 13, 20, 0.6);
             backdrop-filter: blur(10px);
             border: 2px solid var(--cyan);
-            border-radius: 25px; /* Закругление */
+            border-radius: 25px;
             padding: 15px 30px;
             text-align: center;
             font-weight: bold;
@@ -205,13 +206,13 @@
             margin-bottom: 40px;
         }
 
-        /* КАРТОЧКИ ПАКОВ (ЗАКРУГЛЕННЫЕ) */
+        /* КАРТОЧКИ ПАКОВ */
         .pack-card {
             background: var(--panel-bg);
             backdrop-filter: blur(15px);
             border: 1px solid var(--border);
             padding: 24px;
-            border-radius: 24px; /* Закругление по ТЗ */
+            border-radius: 24px;
             cursor: pointer;
             transition: var(--transition);
             position: relative;
@@ -231,7 +232,6 @@
         }
 
         .pack-card:hover::before { opacity: 1; }
-
         .pack-card h3 { margin: 0 0 10px 0; font-size: 18px; color: var(--text); position: relative; z-index: 2; }
         .pack-card p { font-size: 12px; color: #888; margin: 4px 0; position: relative; z-index: 2; }
 
@@ -240,7 +240,7 @@
             display: flex; width: 100%; height: 100%; background: #040406;
         }
 
-        /* ПАНЕЛИ ЛЕВО И ПРАВО (ЗАКРУГЛЕННЫЕ ВНУТРЕННИЕ КАРТОЧКИ) */
+        /* ПАНЕЛИ */
         .panel {
             width: 320px; background: rgba(10, 10, 15, 0.5);
             border-right: 1px solid var(--border);
@@ -250,10 +250,7 @@
         }
 
         #right-panel { border-right: none; border-left: 1px solid var(--border); }
-
-        .panel.collapsed {
-            width: 0; min-width: 0; opacity: 0; pointer-events: none;
-        }
+        .panel.collapsed { width: 0; min-width: 0; opacity: 0; pointer-events: none; }
 
         .panel-header {
             padding: 18px; background: rgba(20, 20, 30, 0.4);
@@ -267,12 +264,11 @@
             display: flex; flex-direction: column; gap: 12px;
         }
 
-        /* Внутренние закругленные карточки */
         .info-card, .item-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
             padding: 16px;
-            border-radius: 18px; /* Закругление */
+            border-radius: 18px;
             transition: var(--transition);
         }
         .item-card:hover {
@@ -302,8 +298,8 @@
         #chat-flow { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         
         .msg { padding: 12px 16px; border-radius: 18px; font-size: 13px; line-height: 1.4; max-width: 85%; position: relative; animation: slideIn 0.3s ease; }
-        .ai-msg { background: rgba(255, 255, 255, 0.05); align-self: flex-start; border: 1px solid var(--border); padding-right: 35px; }
-        .user-msg { background: var(--grad); align-self: flex-end; font-weight: 500; }
+        .ai-msg { background: rgba(255, 255, 255, 0.05); align-self: flex-start; border: 1px solid var(--border); padding-right: 35px; color: #fff; }
+        .user-msg { background: var(--grad); align-self: flex-end; font-weight: 500; color: #fff; }
 
         .speak-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; color: var(--cyan); cursor: pointer; font-size: 14px; opacity: 0.6; transition: 0.2s; }
         .speak-btn:hover { opacity: 1; color: var(--purple); }
@@ -311,7 +307,7 @@
         .oracle-input-area { padding: 15px 0 0 0; border-top: 1px solid var(--border); }
         .oracle-input-area input {
             width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
-            border-radius: 14px; padding: 12px; color: #fff; outline: none; box-sizing: border-box;
+            border-radius: 14px; padding: 12px 45px 12px 12px; color: #fff; outline: none; box-sizing: border-box;
             transition: var(--transition);
         }
         .oracle-input-area input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(2, 182, 237, 0.2); }
@@ -327,7 +323,7 @@
         /* АНИМАЦИИ */
         @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ДЛЯ ТЕЛЕФОНОВ (MOBILE PROTOCOL) */
+        /* ДЛЯ ТЕЛЕФОНОВ */
         @media (max-width: 768px) {
             .panel {
                 position: absolute; top: 0; left: 0; width: 100% !important; height: 100%;
@@ -342,7 +338,6 @@
 </head>
 <body>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ ИНСТРУМЕНТОВ -->
     <header class="toolbar">
         <div class="toolbar-left">
             <div class="logo-area">Oracle AI 1.1</div>
@@ -353,7 +348,6 @@
             </nav>
         </div>
 
-        <!-- АККАУНТ В ПРАВОМ УГЛУ -->
         <div class="account-zone" onclick="alert('Штаб ЛМСХ: Системы авторизации стабильны. Главный инженер на связи!')">
             <div class="avatar">Л</div>
             <div class="account-info">
@@ -365,9 +359,7 @@
 
     <div class="main-workspace">
 
-        <!-- ГЛАВНАЯ СТРАНИЦА: ХАБ ПАКОВ -->
         <div id="hub-page" class="hub-container">
-            <!-- Официальный закругленный таймер до 23 Мая -->
             <div class="countdown-container">
                 🚀 ДО LMSH I/O (23 МАЯ): 
                 <span id="countdown-timer" class="timer-digits">0д 00ч 00м 00с</span>
@@ -379,10 +371,8 @@
             <button class="download-btn" style="background: var(--grad); color: white; width: 200px; margin: 0 auto;" onclick="createNewPack()">+ СОЗДАТЬ НОВЫЙ ПАК</button>
         </div>
 
-        <!-- ИНТЕРФЕЙС IDE (ПЛИТКИ) -->
         <div class="app-container">
             
-            <!-- ЛЕВАЯ ПЛИТКА: ИНФО О ПАКЕ -->
             <aside class="panel collapsed" id="left-panel">
                 <div class="panel-header">LMSH // PACK DETAILS</div>
                 <div class="panel-content">
@@ -395,7 +385,6 @@
                 </div>
             </aside>
 
-            <!-- ЦЕНТРАЛЬНАЯ ПЛИТКА: РЕДАКТОР КОДА -->
             <main class="editor-area">
                 <div class="editor-header">
                     <span>SOURCE_CODE // REAL_START.json</span>
@@ -404,209 +393,218 @@
                 <textarea id="main-editor" placeholder="Выберите пак в хабе или введите миллиарды символов JSON кода..."></textarea>
             </main>
 
-            <!-- ПРАВАЯ ПЛИТКА: УМНЫЙ ОРАКУЛ (МОДЕЛЬ 2.0) -->
-            <div class="oracle-input-area" style="position: relative; padding: 15px 0 0 0; border-top: 1px solid var(--border);">
-    <div id="ai-pulse" style="display: none; align-items: center; gap: 3px; position: absolute; top: -20px; left: 10px; font-size: 10px; color: var(--cyan); letter-spacing: 1px; font-weight: 800; text-transform: uppercase;">
-        <span>Синтез матрицы</span>
-        <div class="wave-bar" style="width:2px; height:8px; background:var(--cyan); animation: bounce 0.5s infinite alternate;"></div>
-        <div class="wave-bar" style="width:2px; height:12px; background:var(--purple); animation: bounce 0.5s infinite alternate 0.15s;"></div>
-        <div class="wave-bar" style="width:2px; height:6px; background:var(--cyan); animation: bounce 0.5s infinite alternate 0.3s;"></div>
-    </div>
+            <aside class="panel collapsed" id="right-panel">
+                <div class="panel-header">ORACLE // CHAT MODULE 🔑)</div>
+                <div class="panel-content">
+                    
+                    <div id="chat-flow">
+                        <div class="msg ai-msg">
+                            <span>Оракул 2.0 активен. Снежинка и Хахми в системе. Какую версию ищем, Инженер?</span>
+                            <button class="speak-btn" onclick="speakFromCache(0)">🔊</button>
+                        </div>
+                    </div>
 
-    <div style="position: relative; display: flex; align-items: center;">
-        <input type="text" id="user-in" placeholder="Спроси про 3.3 Beta, Люми или Мурзика..." onkeypress="if(event.key==='Enter') send()" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 14px; padding: 12px 45px 12px 12px; color: #fff; outline: none; box-sizing: border-box; transition: var(--transition);">
-        
-        <button onclick="send()" style="position: absolute; right: 10px; background: transparent; border: none; color: var(--cyan); cursor: pointer; font-size: 16px; padding: 4px; transition: var(--transition);" onhover="this.style.color='var(--purple)'">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        </button>
-    </div>
-</div>
+                    <div class="oracle-input-area" style="position: relative; padding: 15px 0 0 0; border-top: 1px solid var(--border);">
+                        <div id="ai-pulse" style="display: none; align-items: center; gap: 3px; position: absolute; top: -15px; left: 10px; font-size: 10px; color: var(--cyan); letter-spacing: 1px; font-weight: 800; text-transform: uppercase;">
+                            <span>Синтез матрицы</span>
+                            <div style="width:2px; height:8px; background:var(--cyan); animation: bounce 0.5s infinite alternate;"></div>
+                            <div style="width:2px; height:12px; background:var(--purple); animation: bounce 0.5s infinite alternate 0.15s;"></div>
+                            <div style="width:2px; height:6px; background:var(--cyan); animation: bounce 0.5s infinite alternate 0.3s;"></div>
+                        </div>
+
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="text" id="user-in" placeholder="Спроси про 3.3 Beta, Люми или Мурзика..." onkeypress="if(event.key==='Enter') send()" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 14px; padding: 12px 45px 12px 12px; color: #fff; outline: none; box-sizing: border-box; transition: var(--transition);">
+                            
+                            <button onclick="send()" style="position: absolute; right: 12px; background: transparent; border: none; color: var(--cyan); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: var(--transition);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
 
         </div>
     </div>
 
-    <!-- КОДЫ ЛОГИКИ (РЕКОМЕНДУЕТСЯ ВЫНЕСТИ В js/editor.js И js/oracle-logic.js) -->
     <script>
-     // --- ЧАСТЬ 1: УПРАВЛЕНИЕ ИНТЕРФЕЙСОМ И ХАБОМ ---
-const versions = ["1.0", "2.0", "2.2", "2.5", "2.8", "2.9", "3.0", "3.1", "3.2", "3.3"];
-let currentPackIndex = null;
-const speechCache = ["Оракул 2.0 активен. Снежинка и Хахми в системе. Какую версию ищем, Инженер?"];
+        // --- ЧАСТЬ 1: УПРАВЛЕНИЕ ИНТЕРФЕЙСОМ И ХАБОМ ---
+        const versions = ["1.0", "2.0", "2.2", "2.5", "2.8", "2.9", "3.0", "3.1", "3.2", "3.3"];
+        let currentPackIndex = null;
+        const speechCache = ["Оракул 2.0 активен. Снежинка и Хахми в системе. Какую версию ищем, Инженер?"];
 
-// Та самая функция, которую не находил поиск!
-function togglePanel(id) {
-    const panel = document.getElementById(id);
-    panel.classList.toggle('collapsed');
-    
-    if (!panel.classList.contains('collapsed')) {
-        document.getElementById('hub-page').classList.add('hidden');
-    }
-}
-
-function openHub() {
-    document.getElementById('hub-page').classList.remove('hidden');
-    document.getElementById('left-panel').classList.add('collapsed');
-    document.getElementById('right-panel').classList.add('collapsed');
-}
-
-function loadHub() {
-    const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
-    const list = document.getElementById('packs-list');
-    list.innerHTML = '';
-
-    if(packs.length === 0) {
-        packs.push({name: "Kosmo Level 3.4 Core", code: '{"worldPackGUID": "LMSH-34-VOID", "height": -93.9}', date: new Date().toLocaleString()});
-        localStorage.setItem('lmsh_packs', JSON.stringify(packs));
-    }
-
-    packs.forEach((pack, index) => {
-        const card = document.createElement('div');
-        card.className = 'pack-card';
-        card.innerHTML = `
-            <h3>${pack.name}</h3>
-            <p><strong>Изменен:</strong> ${pack.date}</p>
-            <p><strong>Размер дампа:</strong> ${pack.code.length} симв.</p>
-        `;
-        card.onclick = () => openPack(index);
-        list.appendChild(card);
-    });
-}
-
-function createNewPack() {
-    const name = prompt("Введите название нового пака уровня:", "Kosmo Level " + new Date().toLocaleDateString());
-    if (!name) return;
-
-    const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
-    packs.push({ name: name, code: "---PACK START---\n{\n  \"worldPackGUID\": \"\"\n}", date: new Date().toLocaleString() });
-    localStorage.setItem('lmsh_packs', JSON.stringify(packs));
-    loadHub();
-}
-
-function openPack(index) {
-    const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
-    currentPackIndex = index;
-    
-    document.getElementById('main-editor').value = packs[index].code;
-    document.getElementById('info-pack-name').innerText = packs[index].name;
-    
-    document.getElementById('hub-page').classList.add('hidden');
-    document.getElementById('left-panel').classList.remove('collapsed');
-    document.getElementById('right-panel').classList.remove('collapsed');
-}
-
-function saveCurrentPack() {
-    if(currentPackIndex === null) {
-        alert("Сначала выберите или создайте пак в Хабе!");
-        return;
-    }
-    const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
-    packs[currentPackIndex].code = document.getElementById('main-editor').value;
-    packs[currentPackIndex].date = new Date().toLocaleString();
-    
-    localStorage.setItem('lmsh_packs', JSON.stringify(packs));
-    alert("Системы LMSH: Данные пака успешно перезаписаны в LocalStorage! 🔥");
-    loadHub();
-}
-
-// --- ОФИЦИАЛЬНЫЙ ТАЙМЕР LMSH I/O ---
-function initCountdown() {
-    const targetDate = new Date("May 23, 2026 00:00:00").getTime();
-
-    const timerInterval = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        const timerElement = document.getElementById("countdown-timer");
-        if (timerElement) {
-            timerElement.innerHTML = `${days}д ${hours}ч ${minutes}м ${seconds}с`;
+        function togglePanel(id) {
+            const panel = document.getElementById(id);
+            panel.classList.toggle('collapsed');
+            
+            if (!panel.classList.contains('collapsed')) {
+                document.getElementById('hub-page').classList.add('hidden');
+            }
         }
 
-        if (distance < 0) {
-            clearInterval(timerInterval);
-            if (timerElement) timerElement.innerHTML = "LMSH 2.0 ЗАПУЩЕН! Real Start 🔑)";
+        function openHub() {
+            document.getElementById('hub-page').classList.remove('hidden');
+            document.getElementById('left-panel').classList.add('collapsed');
+            document.getElementById('right-panel').classList.add('collapsed');
         }
-    }, 1000);
-}
 
-// --- ЧАСТЬ 2: ИНТЕЛЛЕКТ ОРАКУЛА МОДЕЛИ 2.0 ---
-function send() {
-    const inp = document.getElementById('user-in');
-    const val = inp.value.trim(); if(!val) return;
-    addMsg(val, 'user-msg'); inp.value = "";
-    
-    // Включаем пульсацию ИИ — Оракул обрабатывает запрос
-    const pulse = document.getElementById('ai-pulse');
-    if(pulse) pulse.style.display = 'flex';
-    
-    setTimeout(() => {
-        const low = val.toLowerCase();
-        let foundVersion = versions.find(v => low.includes(v));
+        function loadHub() {
+            const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
+            const list = document.getElementById('packs-list');
+            list.innerHTML = '';
 
-        // Выключаем пульсацию, когда ответ готов
-        if(pulse) pulse.style.display = 'none';
+            if(packs.length === 0) {
+                packs.push({name: "Kosmo Level 3.4 Core", code: '{"worldPackGUID": "LMSH-34-VOID", "height": -93.9}', date: new Date().toLocaleString()});
+                localStorage.setItem('lmsh_packs', JSON.stringify(packs));
+            }
 
-        if(low.includes("3.3 beta")) {
-            addMsg(`Билд 3.3 Beta найден. Последняя версия с квадратными щитами в 11 мире.`, 'ai-msg', "3.3_Beta");
-        } else if (foundVersion) {
-            addMsg(`Билд ${foundVersion} обнаружен в облаке Prestige HQ. Доступна выгрузка.`, 'ai-msg', foundVersion);
-        } else if(low.includes("люм") || low.includes("21 август") || low.includes("сон")) {
-            addMsg(`Сводка ЛОРа от 21.08.2024: Вторжение Люми. Она обожгла руку в лабиринте. Лаборатория Фиолетовой Кошки на глубине 200 метров активна! Она строила её 4 года.`, 'ai-msg');
-        } else if(low.includes("снежин")) {
-            addMsg(`Снежинка на связи. Высокий тон голосового синтезатора настроен под её вокальную матрицу.`, 'ai-msg');
-        } else if(low.includes("хахми")) {
-            addMsg(`Хахми — мужской вокал Штаба ЛМСХ. Его подсистема координирует аудиологические зацепки паков.`, 'ai-msg');
-        } else if(low.includes("ламирк") || low.includes("инженер")) {
-            addMsg(`Ламирк — Главный инженер. Вы сейчас авторизованы под его токеном. Системы ядра стабильны.`, 'ai-msg');
-        } else if(low.includes("мурзик") || low.includes("помощн")) {
-            addMsg(`Мурзик — Верная Помощница инженера. Координирует работу интерфейса и плиточных трансформаций.`, 'ai-msg');
-        } else if(low.includes("статус") || low.includes("система")) {
-            addMsg(`Престиж Штаб в норме. На таймере меньше недели до LMSH I/O. Инженер, продолжайте деплой.`, 'ai-msg');
-        } else {
-            addMsg('Оракул 2.0 собирает данные. Команда не распознана, но лог отправлен на анализ Снежинке.', 'ai-msg');
+            packs.forEach((pack, index) => {
+                const card = document.createElement('div');
+                card.className = 'pack-card';
+                card.innerHTML = `
+                    <h3>${pack.name}</h3>
+                    <p><strong>Изменен:</strong> ${pack.date}</p>
+                    <p><strong>Размер дампа:</strong> ${pack.code.length} симв.</p>
+                `;
+                card.onclick = () => openPack(index);
+                list.appendChild(card);
+            });
         }
-    }, 800); // Чуть увеличили задержку, чтобы успеть заметить анимацию "мысли" ИИ
-}
 
-function addMsg(text, type, ver = null) {
-    const chat = document.getElementById('chat-flow');
-    const d = document.createElement('div'); d.className = 'msg ' + type;
-    
-    let content = `<span>${text}</span>`;
-    if(type === 'ai-msg') {
-        const cacheIndex = speechCache.length;
-        speechCache.push(text);
-        content += `<button class="speak-btn" onclick="speakFromCache(${cacheIndex})">🔊</button>`;
-    }
-    
-    d.innerHTML = content;
-    if(ver) {
-        const fileName = ver === "3.3_Beta" ? `Kosmo_Level_3.3_Beta.worldpack` : `Kosmo_Level_${ver}.worldpack`;
-        d.innerHTML += `<br><a href="packs/${fileName}" class="download-btn" style="margin-top:10px; width:auto;" download="${fileName}">Скачать ${ver.replace('_', ' ')}</a>`;
-    }
-    chat.appendChild(d); 
-    chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
-}
+        function createNewPack() {
+            const name = prompt("Введите название нового пака уровня:", "Kosmo Level " + new Date().toLocaleDateString());
+            if (!name) return;
 
-function speakFromCache(index) {
-    const text = speechCache[index];
-    if (!text) return;
-    window.speechSynthesis.cancel();
-    const msg = new SpeechSynthesisUtterance();
-    msg.text = text;
-    msg.lang = 'ru-RU';
-    msg.pitch = 1.3;
-    msg.rate = 1.0;
-    window.speechSynthesis.speak(msg);
-}
+            const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
+            packs.push({ name: name, code: "---PACK START---\n{\n  \"worldPackGUID\": \"\"\n}", date: new Date().toLocaleString() });
+            localStorage.setItem('lmsh_packs', JSON.stringify(packs));
+            loadHub();
+        }
 
-window.onload = function() {
-    loadHub();
-    initCountdown();
-};
+        function openPack(index) {
+            const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
+            currentPackIndex = index;
+            
+            document.getElementById('main-editor').value = packs[index].code;
+            document.getElementById('info-pack-name').innerText = packs[index].name;
+            
+            document.getElementById('hub-page').classList.add('hidden');
+            document.getElementById('left-panel').classList.remove('collapsed');
+            document.getElementById('right-panel').classList.remove('collapsed');
+        }
+
+        function saveCurrentPack() {
+            if(currentPackIndex === null) {
+                alert("Сначала выберите или создайте пак в Хабе!");
+                return;
+            }
+            const packs = JSON.parse(localStorage.getItem('lmsh_packs') || '[]');
+            packs[currentPackIndex].code = document.getElementById('main-editor').value;
+            packs[currentPackIndex].date = new Date().toLocaleString();
+            
+            localStorage.setItem('lmsh_packs', JSON.stringify(packs));
+            alert("Системы LMSH: Данные пака успешно перезаписаны в LocalStorage! 🔥");
+            loadHub();
+        }
+
+        // --- ТАЙМЕР LMSH I/O ---
+        function initCountdown() {
+            const targetDate = new Date("May 23, 2026 00:00:00").getTime();
+
+            const timerInterval = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const timerElement = document.getElementById("countdown-timer");
+                if (timerElement) {
+                    timerElement.innerHTML = `${days}д ${hours}ч ${minutes}м ${seconds}с`;
+                }
+
+                if (distance < 0) {
+                    clearInterval(timerInterval);
+                    if (timerElement) timerElement.innerHTML = "LMSH 2.0 ЗАПУЩЕН! Real Start 🔑)";
+                }
+            }, 1000);
+        }
+
+        // --- ЧАСТЬ 2: ИНТЕЛЛЕКТ ОРАКУЛА МОДЕЛИ 2.0 ---
+        function send() {
+            const inp = document.getElementById('user-in');
+            const val = inp.value.trim(); if(!val) return;
+            addMsg(val, 'user-msg'); inp.value = "";
+            
+            const pulse = document.getElementById('ai-pulse');
+            if(pulse) pulse.style.display = 'flex';
+            
+            setTimeout(() => {
+                const low = val.toLowerCase();
+                let foundVersion = versions.find(v => low.includes(v));
+
+                if(pulse) pulse.style.display = 'none';
+
+                if(low.includes("3.3 beta")) {
+                    addMsg(`Билд 3.3 Beta найден. Последняя версия с квадратными щитами в 11 мире.`, 'ai-msg', "3.3_Beta");
+                } else if (foundVersion) {
+                    addMsg(`Билд ${foundVersion} обнаружен в облаке Prestige HQ. Доступна выгрузка.`, 'ai-msg', foundVersion);
+                } else if(low.includes("люм") || low.includes("21 август") || low.includes("сон")) {
+                    addMsg(`Сводка ЛОРа от 21.08.2024: Вторжение Люми. Она обожгла руку в лабиринте. Лаборатория Фиолетовой Кошки на глубине 200 метров активна! Она строила её 4 года.`, 'ai-msg');
+                } else if(low.includes("снежин")) {
+                    addMsg(`Снежинка на связи. Высокий тон голосового синтезатора настроен под её вокальную матрицу.`, 'ai-msg');
+                } else if(low.includes("хахми")) {
+                    addMsg(`Хахми — мужской вокал Штаба ЛМСХ. Его подсистема координирует аудиологические зацепки паков.`, 'ai-msg');
+                } else if(low.includes("ламирк") || low.includes("инженер")) {
+                    addMsg(`Ламирк — Главный инженер. Вы сейчас авторизованы под его токеном. Системы ядра стабильны.`, 'ai-msg');
+                } else if(low.includes("мурзик") || low.includes("помощн")) {
+                    addMsg(`Мурзик — Верная Помощница инженера. Координирует работу интерфейса и плиточных трансформаций.`, 'ai-msg');
+                } else if(low.includes("статус") || low.includes("система")) {
+                    addMsg(`Престиж Штаб в норме. На таймере меньше недели до LMSH I/O. Инженер, продолжайте деплой.`, 'ai-msg');
+                } else {
+                    addMsg('Оракул 2.0 собирает данные. Команда не распознана, но лог отправлен на анализ Снежинке.', 'ai-msg');
+                }
+            }, 800);
+        }
+
+        function addMsg(text, type, ver = null) {
+            const chat = document.getElementById('chat-flow');
+            const d = document.createElement('div'); d.className = 'msg ' + type;
+            
+            let content = `<span>${text}</span>`;
+            if(type === 'ai-msg') {
+                const cacheIndex = speechCache.length;
+                speechCache.push(text);
+                content += `<button class="speak-btn" onclick="speakFromCache(${cacheIndex})">🔊</button>`;
+            }
+            
+            d.innerHTML = content;
+            if(ver) {
+                const fileName = ver === "3.3_Beta" ? `Kosmo_Level_3.3_Beta.worldpack` : `Kosmo_Level_${ver}.worldpack`;
+                d.innerHTML += `<br><a href="packs/${fileName}" class="download-btn" style="margin-top:10px; width:auto;" download="${fileName}">Скачать ${ver.replace('_', ' ')}</a>`;
+            }
+            chat.appendChild(d); 
+            chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+        }
+
+        function speakFromCache(index) {
+            const text = speechCache[index];
+            if (!text) return;
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            msg.lang = 'ru-RU';
+            msg.pitch = 1.3;
+            msg.rate = 1.0;
+            window.speechSynthesis.speak(msg);
+        }
+
+        window.onload = function() {
+            loadHub();
+            initCountdown();
+        };
     </script>
 </body>
 </html>
