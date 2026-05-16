@@ -343,7 +343,7 @@
             <div class="logo-area">Oracle AI 1.1</div>
             <nav class="nav-links">
                 <button class="nav-btn" onclick="openHub()">🗂 Хаб Паков</button>
-                <button class="nav-btn" onclick="togglePanel('left-panel')">📄 Инфо</button>
+                <button class="nav-btn" onclick="togglePanel('left-panel')">📄 Информация</button>
                 <button class="nav-btn" onclick="togglePanel('right-panel')">💧 Оракул</button>
             </nav>
         </div>
@@ -421,6 +421,7 @@
 <button class="action-btn" onclick="triggerImport()">Импорт</button>
 <input type="file" id="import-file-input" accept=".worldpack,.txt" style="display: none;" onchange="handleImport(event)">
 </button>
+<button class="action-btn" onclick="exportFile()">Экспорт</button>
                         </div>
                     </div>
 
@@ -608,6 +609,56 @@
             loadHub();
             initCountdown();
         };
+// Функция, которая имитирует клик по скрытому инпуту при нажатии на кнопку
+function triggerImport() {
+    document.getElementById('import-file-input').click();
+}
+
+// Функция, которая читает файл и выводит его в редактор
+function handleImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const content = e.target.result;
+        
+        // Предположим, что у твоего текстового поля (textarea/div) id="source-code"
+        const editor = document.getElementById('source-code'); 
+        if (editor) {
+            editor.value = content; // или editor.innerText в зависимости от тега
+            
+            // Если ты хранишь текущий пак в LocalStorage, обновляем и его
+            localStorage.setItem('currentPackCode', content);
+            
+            alert(`Файл ${file.name} успешно импортирован!`);
+        }
+    };
+    reader.readAsText(file);
+}
+function exportFile() {
+    // Забираем текущий текст из редактора
+    const editor = document.getElementById('source-code');
+    if (!editor) return;
+    const textToSave = editor.value; // или editor.innerText
+
+    // Имя файла по умолчанию (можно вытягивать динамически из "Текущий Пак" в инфо-панели)
+    const fileName = "REAL_START.worldpack"; 
+
+    // Создаем Blob (двоичный объект) с текстовыми данными
+    const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
+    
+    // Создаем виртуальную ссылку для скачивания
+    const downloadLink = document.createElement("a");
+    downloadLink.download = fileName;
+    downloadLink.href = window.URL.createObjectURL(blob);
+    
+    // Скрываем ссылку, добавляем в документ, кликаем и удаляем
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
     </script>
 </body>
 </html>
