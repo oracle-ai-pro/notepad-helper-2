@@ -15,6 +15,10 @@
             --grad: linear-gradient(90deg, #02b6ed 0%, #e60ced 100%);
             --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        @keyframes bounce {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(2); }
+}
 
         /* Кастомный скроллбар для стиля */
         ::-webkit-scrollbar { width: 4px; height: 4px; background: transparent; }
@@ -534,16 +538,22 @@ function send() {
     const val = inp.value.trim(); if(!val) return;
     addMsg(val, 'user-msg'); inp.value = "";
     
+    // Включаем пульсацию ИИ — Оракул обрабатывает запрос
+    const pulse = document.getElementById('ai-pulse');
+    if(pulse) pulse.style.display = 'flex';
+    
     setTimeout(() => {
         const low = val.toLowerCase();
         let foundVersion = versions.find(v => low.includes(v));
+
+        // Выключаем пульсацию, когда ответ готов
+        if(pulse) pulse.style.display = 'none';
 
         if(low.includes("3.3 beta")) {
             addMsg(`Билд 3.3 Beta найден. Последняя версия с квадратными щитами в 11 мире.`, 'ai-msg', "3.3_Beta");
         } else if (foundVersion) {
             addMsg(`Билд ${foundVersion} обнаружен в облаке Prestige HQ. Доступна выгрузка.`, 'ai-msg', foundVersion);
-        } 
-        else if(low.includes("люм") || low.includes("21 август") || low.includes("сон")) {
+        } else if(low.includes("люм") || low.includes("21 август") || low.includes("сон")) {
             addMsg(`Сводка ЛОРа от 21.08.2024: Вторжение Люми. Она обожгла руку в лабиринте. Лаборатория Фиолетовой Кошки на глубине 200 метров активна! Она строила её 4 года.`, 'ai-msg');
         } else if(low.includes("снежин")) {
             addMsg(`Снежинка на связи. Высокий тон голосового синтезатора настроен под её вокальную матрицу.`, 'ai-msg');
@@ -558,7 +568,7 @@ function send() {
         } else {
             addMsg('Оракул 2.0 собирает данные. Команда не распознана, но лог отправлен на анализ Снежинке.', 'ai-msg');
         }
-    }, 400);
+    }, 800); // Чуть увеличили задержку, чтобы успеть заметить анимацию "мысли" ИИ
 }
 
 function addMsg(text, type, ver = null) {
