@@ -454,7 +454,7 @@
     </div>
 
     <script>
-        // Функция переключения видимости панелей (исправлен баг toggle)
+        // Функция переключения видимости панелей (исправлен баг опечатки toggle)
         function togglePanel(panelId) {
             const panel = document.getElementById(panelId);
             if (panel) {
@@ -469,11 +469,12 @@
         // Динамическое обновление имени пака в шапке редактора
         function updatePackName(val) {
             const fileTitle = document.getElementById('editor-file-title');
+            // Переводим имя в формат файла с расширением .worldpack
             const formattedName = val.trim().toUpperCase().replace(/\s+/g, '_');
             fileTitle.innerText = `SOURCE_CODE // ${formattedName}.worldpack`;
         }
 
-        // Защита LMSH Cloud - Без аккаунта не запустится
+        // Защита LMSH Cloud - Без аккаунта не запустится!
         function handleStorageChange(value) {
             if (value === 'cloud') {
                 alert("🔒 Ошибка доступа! Сеть LMSH Cloud требует защищенный аккаунт Главного инженера.\nСинхронизация отклонена. Возврат на LocalStorage.");
@@ -505,6 +506,7 @@
                 const content = e.target.result;
                 document.getElementById('source-code').value = content;
                 
+                // Извлекаем имя файла без расширения и пишем в инпут пака
                 const cleanName = file.name.replace(/\.[^/.]+$/, "");
                 document.getElementById('pack-name-input').value = cleanName;
                 updatePackName(cleanName);
@@ -549,6 +551,7 @@
             } else if (value === 'ideas') {
                 desc.innerText = "40 попыток на генерацию кода, идеи в день. Прежде чем её использовать, войдите в аккаунт.";
                 counter.style.display = "block";
+                // Сбрасываем счетчик, показывая необходимость авторизации
                 document.getElementById('attempts-count').innerText = "0";
                 alert("🔑 Требуется авторизация!\nЧтобы разблокировать генерацию и получить 40 попыток, подключите модуль аккаунта через LMSH Cloud.");
             }
@@ -561,12 +564,14 @@
                 const chatFlow = document.getElementById('chat-flow');
                 if (!input.value.trim()) return;
 
+                // Добавляем сообщение пользователя
                 const userMsg = document.createElement('div');
                 userMsg.className = 'msg';
                 userMsg.style.borderLeft = '3px solid var(--accent-cyan)';
                 userMsg.innerText = input.value;
                 chatFlow.appendChild(userMsg);
 
+                // Ответ Оракула 2.0
                 setTimeout(() => {
                     const aiMsg = document.createElement('div');
                     aiMsg.className = 'msg ai-msg';
