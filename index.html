@@ -2,576 +2,447 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORACLE AI 1.1 // LMSH Studio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ORACLE STUDIO v2.5 | Remixed HQ</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0b10">
     <style>
+        /* MATERIAL YOU ДИНАМИЧЕСКАЯ ПАЛИТРА */
         :root {
-            --bg-dark: #0a0b0d;
-            --panel-bg: #111317;
-            --accent-cyan: #00b4d8;
-            --accent-purple: #9b5de5;
-            --text-main: #e0e1dd;
-            --text-dim: #747d8c;
-            --border-color: #23272a;
-            --transition: all 0.3s ease;
+            --bg: #0a0b10;
+            --surface: #14151f;
+            --surface-variant: #1f202e;
+            --on-surface: #e3e2e6;
+            --on-surface-variant: #c7c6ca;
+            --primary: #adc6ff;
+            --primary-container: #254487;
+            --on-primary-container: #d9e2ff;
+            --secondary: #e8bbf1;
+            --border: #434753;
+            --grad: linear-gradient(90deg, #02b6ed 0%, #e60ced 100%);
+            
+            --radius-large: 28px;
+            --radius-medium: 16px;
+            --radius-small: 12px;
+            --transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', Courier, monospace;
+        body.light-theme {
+            --bg: #f8f9ff;
+            --surface: #f0f1f9;
+            --surface-variant: #e1e2ec;
+            --on-surface: #1a1b20;
+            --on-surface-variant: #43474e;
+            --primary: #3b5ba9;
+            --primary-container: #d9e2ff;
+            --on-primary-container: #001947;
+            --secondary: #74547e;
+            --border: #c3c6cf;
         }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+        body.light-theme .user-msg { color: #fff; }
 
-        /* Шапка */
+        ::-webkit-scrollbar { width: 6px; background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--on-surface); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; transition: background 0.3s ease; }
+        body { display: flex; flex-direction: column; height: 100vh; }
+
+        /* НАВИГАЦИЯ */
         header {
-            background-color: var(--panel-bg);
-            border-bottom: 2px solid var(--border-color);
-            padding: 10px 20px;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo {
-            font-weight: bold;
-            color: var(--accent-purple);
-            text-shadow: 0 0 10px var(--accent-purple);
-        }
-
-        .nav-btn {
-            background: #1c1f24;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 5px 12px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 12px;
-            transition: var(--transition);
-        }
-        .nav-btn:hover {
-            border-color: var(--accent-cyan);
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        /* Главный рабочий стол */
-        .main-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Панели */
-        aside {
-            width: 300px;
-            background-color: var(--panel-bg);
-            border-right: 2px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            overflow-y: auto;
-            transition: transform 0.3s ease, width 0.3s ease;
-        }
-
-        #right-panel {
-            border-right: none;
-            border-left: 2px solid var(--border-color);
-        }
-
-        .panel-header {
-            font-size: 14px;
-            color: var(--accent-cyan);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .card {
-            background: #16181d;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .meta-group {
-            margin-bottom: 12px;
-        }
-
-        .meta-group label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-dim);
-            margin-bottom: 4px;
-        }
-
-        .meta-input, .meta-select {
-            width: 100%;
-            background: #0d0e12;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 6px;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-
-        /* Тумблеры */
-        .switch-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 20px;
-        }
-
-        .switch input { opacity: 0; width: 0; height: 0; }
-
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #2c3038; transition: .3s; border-radius: 20px;
-        }
-
-        .slider:before {
-            position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
-            background-color: white; transition: .3s; border-radius: 50%;
-        }
-
-        input:checked + .slider { background-color: var(--accent-purple); }
-        input:checked + .slider:before { transform: translateX(20px); }
-
-        .file-ops {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, #1c1f24, #16181d);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .action-btn:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
-        }
-
-        .save-btn {
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
-            color: #fff;
-            border: none;
-        }
-
-        /* Центр: Редактор кода */
-        .center-code-block {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: #0d0e12;
-            z-index: 1;
-        }
-
-        .editor-header {
-            background: var(--panel-bg);
-            padding: 10px 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        #source-code {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #39ff14;
-            padding: 20px;
-            font-size: 14px;
-            resize: none;
-            outline: none;
-            line-height: 1.5;
-        }
-
-        /* Чат */
-        #chat-flow {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
-        }
-
-        .msg {
-            background: #16181d;
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            position: relative;
-        }
-
-        .ai-msg { border-left: 3px solid var(--accent-purple); }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .nav-logo-text { font-weight: 800; font-size: 15px; letter-spacing: 1px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
         
-        .speak-btn {
-            background: transparent; border: none; color: var(--text-dim);
-            cursor: pointer; position: absolute; right: 10px; top: 10px;
-        }
+        .menu-trigger-btn { background: var(--surface-variant); border: none; color: var(--primary); padding: 8px 14px; border-radius: var(--radius-small); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .menu-trigger-btn:hover { background: var(--primary-container); color: var(--on-primary-container); transform: translateY(-1px); }
+        .purple-trigger { color: var(--secondary) !important; }
 
-        .oracle-input-area {
-            margin-top: auto;
-        }
+        .avatar { width: 34px; height: 34px; background: var(--grad); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 14px; box-shadow: 0 0 10px rgba(2, 182, 237, 0.3); }
 
-        #user-in {
-            width: 100%;
-            background: #0d0e12;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 13px;
-        }
+        /* МОНОЛИТ-КОНТЕЙНЕР */
+        .main-container { display: flex; flex: 1; overflow: hidden; position: relative; animation: boot 0.5s cubic-bezier(0.2, 0, 0, 1); }
 
-        .model-desc {
-            font-size: 11px;
-            color: var(--text-dim);
-            margin-top: 5px;
-        }
+        aside { width: 320px; background-color: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; transition: var(--transition); z-index: 10; }
+        #right-panel { border-right: none; border-left: 1px solid var(--border); }
+        aside.collapsed-pc { width: 0px !important; padding: 0px !important; border: none !important; opacity: 0; pointer-events: none; }
 
-        .limit-counter {
-            font-size: 11px;
-            color: var(--accent-cyan);
-            margin-top: 5px;
-            text-align: right;
-        }
+        .panel-header { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; border-left: 4px solid var(--secondary); padding-left: 10px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* ======================================================= */
-        /* 📱 НАДЕЖНЫЙ МОБИЛЬНЫЙ АДАПТИВ (ПАНЕЛИ НЕ УЛЕТАЮТ)        */
-        /* ======================================================= */
+        .card { background: var(--surface-variant); border: 1px solid var(--border); border-radius: var(--radius-medium); padding: 14px; margin-bottom: 15px; }
+        .meta-group { margin-bottom: 10px; }
+        .meta-group label { display: block; font-size: 11px; color: var(--on-surface-variant); margin-bottom: 4px; font-weight: 600; }
+        .meta-input, .meta-select { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--on-surface); padding: 8px 12px; border-radius: var(--radius-small); font-size: 13px; outline: none; }
+
+        /* РЕМИКС КАРТОЧКИ */
+        .remix-item { background: var(--surface-variant); border: 1px solid var(--border); border-radius: var(--radius-small); padding: 12px; margin-bottom: 8px; font-size: 13px; cursor: pointer; transition: var(--transition); }
+        .remix-item:hover { border-color: var(--secondary); background: rgba(232, 187, 241, 0.05); }
+        .remix-title { font-weight: bold; color: var(--secondary); margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .remix-desc { font-size: 11px; color: var(--on-surface-variant); line-height: 1.4; }
+
+        .action-btn { display: block; padding: 10px; background: var(--surface-variant); color: var(--primary); border-radius: var(--radius-small); font-weight: 700; font-size: 11px; text-transform: uppercase; text-align: center; transition: var(--transition); cursor: pointer; border: 1px solid var(--border); width: 100%; }
+        .action-btn:hover { background: var(--primary-container); color: var(--on-primary-container); }
+        .save-btn { background: var(--grad); color: white !important; border: none; }
+
+        /* ЦЕНТРАЛЬНЫЙ РЕДАКТОР */
+        .center-code-block { flex: 1; display: flex; flex-direction: column; background: #05060a; z-index: 1; transition: var(--transition); }
+        .editor-header { background: var(--surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        #source-code { flex: 1; background: transparent; border: none; color: #39ff14; padding: 20px; font-family: 'Courier New', Courier, monospace; font-size: 14px; resize: none; outline: none; line-height: 1.6; }
+
+        /* ВКЛАДКИ ЧАТОВ ОРАКУЛА */
+        .chat-tabs-container { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .chat-tab { background: var(--surface-variant); border: 1px solid var(--border); color: var(--on-surface-variant); padding: 6px 12px; border-radius: var(--radius-small); font-size: 11px; font-weight: bold; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .chat-tab.active { background: var(--primary-container); border-color: var(--primary); color: var(--on-primary-container); }
+        .close-tab-btn { color: #ff5252; cursor: pointer; font-weight: bold; font-size: 10px; margin-left: 4px; }
+
+        /* ОРАКУЛ ЧАТ */
+        #chat-screen { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; height: 100%; }
+        .chat-flow-box { flex-grow: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        
+        .welcome-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; gap: 12px; padding: 15px; transition: var(--transition); text-align: center; }
+        .welcome-zone.hidden { display: none; }
+        .blob-container { position: relative; width: 110px; height: 40px; background: #000; filter: blur(5px) contrast(15); overflow: hidden; border-radius: var(--radius-large); }
+        .blob { position: absolute; width: 18px; height: 18px; border-radius: 50%; }
+        .cyan-blob { background: #02b6ed; left: 24px; animation: mergeLeft 5s infinite ease-in-out; }
+        .purple-blob { background: #e60ced; right: 24px; animation: mergeRight 5s infinite ease-in-out; }
+
+        .msg { padding: 10px 14px; font-size: 13px; max-width: 85%; line-height: 1.4; animation: slideIn 0.2s cubic-bezier(0, 0, 0.2, 1); word-wrap: break-word; }
+        .ai-msg { background: var(--surface-variant); color: var(--on-surface); align-self: flex-start; border-radius: 4px 16px 16px 16px; border: 1px solid var(--border); }
+        .user-msg { background: var(--grad); color: #fff; align-self: flex-end; font-weight: 500; border-radius: 16px 4px 16px 16px; }
+
+        .input-box { padding: 10px; display: flex; gap: 8px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border); align-items: center; }
+        #user-input { flex: 1; background: var(--surface-variant); border: 1px solid var(--border); border-radius: var(--radius-medium); padding: 10px 14px; color: var(--on-surface); outline: none; font-size: 13px; }
+        
+        .send-btn { background: var(--grad); border: none; border-radius: var(--radius-medium); width: 42px; height: 38px; color: white; cursor: pointer; font-size: 14px; transition: var(--transition); opacity: 0; transform: scale(0.85); pointer-events: none; display: flex; align-items: center; justify-content: center; }
+        .send-btn.active { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+        /* ПОДКАСТ КАНАЛ */
+        .io-stream-container { background: var(--surface-variant); border: 2px solid var(--secondary); border-radius: var(--radius-medium); overflow: hidden; display: flex; flex-direction: column; margin-top: auto; }
+        .audio-link-body { padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .launch-btn { background: var(--grad); color: #fff; border: none; padding: 8px 14px; border-radius: var(--radius-small); font-weight: bold; font-size: 11px; cursor: pointer; }
+
+        /* МОБИЛЬНЫЙ МЕХАНИЗМ */
         @media (max-width: 900px) {
-            body {
-                overflow: hidden; /* Ограничиваем скролл всего экрана */
-                height: 100vh;
-            }
-
-            .main-container {
-                flex-direction: column;
-            }
-
-            /* Боковые панели превращаются в скользящие оверлеи */
-            aside {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                width: 280px !important;
-                height: 100%;
-                z-index: 5;
-                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-                display: flex !important; /* Гарантируем flex-структуру */
-            }
-
-            #left-panel {
-                left: 0;
-                transform: translateX(-100%); /* Прячем влево */
-                border-right: 2px solid var(--border-color);
-            }
-
-            #right-panel {
-                right: 0;
-                transform: translateX(100%); /* Прячем вправо */
-                border-left: 2px solid var(--border-color);
-            }
-
-            /* Классы для открытия панелей на мобилках */
-            aside.active {
-                transform: translateX(0) !important;
-            }
-
-            .center-code-block {
-                width: 100%;
-                height: 100%;
-            }
+            .main-container { flex-direction: column; }
+            aside { position: absolute; top: 0; bottom: 0; width: 290px !important; height: 100%; z-index: 90; display: flex !important; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+            #left-panel { left: 0; transform: translateX(-100%); }
+            #right-panel { right: 0; transform: translateX(100%); }
+            aside.active-mobile { transform: translateX(0) !important; }
         }
+
+        @keyframes boot { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-area">
-            <span class="logo">ORACLE AI 1.1</span>
-            <button class="nav-btn">🗂 Хаб Паков</button>
-            <button class="nav-btn" onclick="togglePanel('left-panel')">📄 Инфо</button>
-            <button class="nav-btn" onclick="togglePanel('right-panel')">💧 Оракул</button>
+            <button class="menu-trigger-btn purple-trigger" onclick="toggleLeftPanel()">🧬 Ремиксы</button>
+            <span class="nav-logo-text">Oracle Studio v2.5</span>
+            <button class="menu-trigger-btn" onclick="toggleRightPanel()">🔮 Оракул Чаты</button>
         </div>
         <div class="user-profile">
-            <div class="avatar">Л</div>
-            <div style="font-size: 11px;">
-                <div style="font-weight: bold;">Ламирк</div>
-                <div style="color: var(--accent-cyan);">ГЛАВНЫЙ ИНЖЕНЕР</div>
-            </div>
+            <div class="avatar">🛠️</div>
         </div>
     </header>
 
     <div class="main-container">
 
         <aside id="left-panel">
-            <div class="panel-header">LMSH // PACK DETAILS</div>
-            <div class="card">
+            <div class="panel-header">Конфигурация Хаба</div>
+            <div class="card" style="margin-bottom: 12px;">
                 <div class="meta-group">
-                    <label>Имя текущего пака:</label>
-                    <input type="text" id="pack-name-input" class="meta-input" value="Kosmo Level 3.4 Core" oninput="updatePackName(this.value)">
+                    <label>Выбранный Пак:</label>
+                    <input type="text" id="pack-name-input" class="meta-input" value="REAL_START" oninput="updatePackName(this.value)">
                 </div>
-                <div class="meta-group">
-                    <label>Индекс памяти:</label>
-                    <select id="storage-select" class="meta-select" onchange="handleStorageChange(this.value)">
-                        <option value="local">LocalStorage (Устройство)</option>
-                        <option value="cloud">LMSH Cloud (Облачный Хаб)</option>
+                <div class="meta-group" style="margin: 0;">
+                    <label>Хранилище Ядра:</label>
+                    <select class="meta-select" onchange="handleStorageChange(this.value)">
+                        <option value="local">LocalStorage</option>
+                        <option value="cloud">LMSH Cloud</option>
                     </select>
-                </div>
-                <div class="meta-group">
-                    <label>Автор пака:</label>
-                    <input type="text" class="meta-input" value="Ламирк">
-                </div>
-                <div class="meta-group">
-                    <label>Высота бездны:</label>
-                    <div style="font-size:14px; font-weight:bold; color:var(--accent-cyan); margin-top:3px;">-93.9</div>
-                </div>
-                <div class="meta-group">
-                    <label>Статус лора:</label>
-                    <div style="font-size:13px; color:#39ff14; margin-top:3px;">Kosmo 3.4 Active</div>
-                </div>
-                <div class="switch-group">
-                    <span style="font-size:12px;">Разрешить ремиксы</span>
-                    <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                </div>
-                <div class="switch-group">
-                    <span style="font-size:12px; color: #ff4757;">Режим Спидрана</span>
-                    <label class="switch"><input type="checkbox" id="speedrun-toggle" onchange="checkSpeedrun(this)"><span class="slider"></span></label>
                 </div>
             </div>
 
-            <div class="panel-header">Управление файлом</div>
-            <div class="file-ops">
-                <button class="action-btn" onclick="triggerImport()">📥 Импорт</button>
-                <button class="action-btn" onclick="exportFile()">📤 Экспорт</button>
-            </div>
-            <input type="file" id="import-file-input" accept=".worldpack,.txt" style="display: none;" onchange="handleImport(event)">
+            <div class="panel-header">Генератор Ремиксов 🌌</div>
+            <div id="remixes-box" style="flex: 1; overflow-y: auto; padding-right: 2px;">
+                </div>
+
+            <button class="action-btn" onclick="toggleTheme()" id="theme-btn" style="margin-top: 10px;">Сменить Слой Ядра</button>
         </aside>
 
         <main class="center-code-block">
             <div class="editor-header">
-                <span id="editor-file-title" style="font-size: 12px; color: var(--text-dim);">SOURCE_CODE // REAL_START.worldpack</span>
-                <button class="action-btn save-btn" style="padding: 5px 15px;" onclick="saveToLocalStorage()">💾 Сохранить</button>
+                <span id="editor-file-title" style="font-size: 11px; color: var(--on-surface-variant); font-weight: bold; font-family: monospace;">SOURCE_CODE // REAL_START.worldpack</span>
+                <button class="action-btn save-btn" style="padding: 6px 14px; width: auto;" onclick="saveCodeToLocal()">💾 Сохранить в Кэш</button>
             </div>
             <textarea id="source-code" spellcheck="false">{
     "worldPackGUID": "LMSH-34-VOID",
-    "height": -93.9
+    "height": -93.9,
+    "status": "Active Core",
+    "remixAllowed": true
 }</textarea>
         </main>
 
         <aside id="right-panel">
-            <div class="panel-header">ORACLE // CHAT MODULE 🔑)</div>
-            <div class="card">
-                <div class="meta-group">
-                    <label>Использование Модели:</label>
-                    <select id="model-select" class="meta-select" onchange="switchModel(this.value)">
-                        <option value="normal">Обычная</option>
-                        <option value="ideas">Идеи</option>
+            <div id="chat-screen">
+                <div class="panel-header">
+                    <span>Потоки Оракула 2.3</span>
+                    <button onclick="createNewChatTab()" style="background: var(--surface-variant); border: 1px solid var(--border); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;">+ Новая вкладка</button>
+                </div>
+
+                <div class="chat-tabs-container" id="tabs-container"></div>
+
+                <div class="card" style="padding:8px; margin-bottom:10px;">
+                    <select id="voice-select" class="meta-select" style="padding: 6px 10px;">
+                        <option value="lamirk" selected>🛠️ Ламирк (Инженер)</option>
+                        <option value="murzik">🐾 Мурзик (Помощница)</option>
+                        <option value="khakhmi">🎤 Хахми (Вокал)</option>
+                        <option value="snezhinka">❄️ Снежинка (Вокал)</option>
                     </select>
-                    <div id="model-description" class="model-desc">Она не может внедрять ничего в код, но может помогать.</div>
-                    <div id="model-counter" class="limit-counter" style="display: none;">Попыток осталось: <span id="attempts-count">40</span>/40</div>
+                </div>
+
+                <div id="welcome-block" class="welcome-zone">
+                    <div class="blob-container">
+                        <div class="blob cyan-blob"></div>
+                        <div class="blob purple-blob"></div>
+                    </div>
+                    <h1 class="derzky-title" style="font-size: 22px;">Что делаешь?</h1>
+                    <p style="font-size: 11px; color: var(--on-surface-variant);">Создай новую вкладку чата или задай вопрос по текущему ремиксу пака.</p>
+                </div>
+
+                <div id="chat-flow" class="chat-flow-box"></div>
+
+                <div class="input-box">
+                    <input type="text" id="user-input" placeholder="Запрос к ядру ЛМСХ..." oninput="checkInput()" onkeypress="handleKeyPress(event)">
+                    <button id="send-btn" class="send-btn" onclick="sendMsg()">➔</button>
                 </div>
             </div>
-            <div id="chat-flow">
-                <div class="msg ai-msg">
-                    Оракул 2.0 активен. Снежинка и Хахми в системе. Какую версию ищем, Инженер?
-                    <button class="speak-btn" onclick="speakFromCache(0)">🔊</button>
+
+            <div class="io-stream-container">
+                <div class="audio-link-body">
+                    <span style="font-size: 11px; font-weight: bold; color: var(--secondary);">🔑) NotebookLM Gate</span>
+                    <button class="launch-btn" onclick="window.open('https://notebooklm.google.com/', '_blank')">Стрим 🛸</button>
                 </div>
-            </div>
-            <div class="oracle-input-area">
-                <input type="text" id="user-in" placeholder="Спроси про 3.3 Beta, Люми или Мурзика..." onkeypress="handleOracleChat(event)">
             </div>
         </aside>
 
     </div>
 
-    <script>
-        // Умное переключение панелей без багов отсечения
-        function togglePanel(panelId) {
-            const panel = document.getElementById(panelId);
-            if (!panel) return;
+<script>
+    // Матрица готовых Ремиксов Паков для инжекции
+    const packRemixes = [
+        { title: "⚡ Remixed: Room 1 (Fly)", desc: "Инверсия цветового спектра портала. Парящая Люми. Гравитация = 0.", code: '{\n    "room": "Room 1 (Spawn)",\n    "ability": "Fly",\n    "spectrum": "Inverted",\n    "gravity": 0\n}' },
+        { title: "🐾 Remixed: Room 2 (Click)", desc: "ClickDetector автоматика. Датчики движения лазеров Штаба ЛМСХ.", code: '{\n    "room": "Room 2 (Lab)",\n    "sensors": "ClickDetector",\n    "diagnostics": "Active",\n    "laserGrid": true\n}' },
+        { title: "❄️ Remixed: Room 5 (Crack)", desc: "Аварийный режим. Физический разрыв LED-ленты. Горят 8 свечей.", code: '{\n    "room": "Room 5 (LED)",\n    "status": "Hardware Damage",\n    "activeLEDsAfterCrack": 8\n}' },
+        { title: "🎤 Remixed: Room 7 (Neon)", desc: "Предел Лаборатории. 1 NEON LEVEL между Хахми и Снежинкой. Зажатая кнопка.", code: '{\n    "room": "Room 7 (Final)",\n    "barrier": "1 Neon Level",\n    "quote": "В любом случае я смогу себя контролировать"\n}' }
+    ];
 
-            if (window.innerWidth <= 900) {
-                // Мобильная логика: переключаем класс active
-                panel.classList.toggle('active');
-                
-                // Закрываем противоположную панель, чтобы не перекрывали друг друга
-                const otherId = panelId === 'left-panel' ? 'right-panel' : 'left-panel';
-                document.getElementById(otherId).classList.remove('active');
-            } else {
-                // ПК логика: обычный toggle через display
-                if (panel.style.display === "none") {
-                    panel.style.display = "flex";
-                } else {
-                    panel.style.display = "none";
-                }
-            }
-        }
+    // Управление вкладками чатов
+    let chatTabs = {}; 
+    let activeTabId = null;
 
-        // Авто-сброс стилей при изменении размера экрана, чтобы ничего не пропадало
-        window.addEventListener('resize', () => {
-            const left = document.getElementById('left-panel');
-            const right = document.getElementById('right-panel');
-            if (window.innerWidth > 900) {
-                left.style.display = "flex";
-                right.style.display = "flex";
-                left.classList.remove('active');
-                right.classList.remove('active');
-            } else {
-                left.style.display = "";
-                right.style.display = "";
-            }
+    window.onload = function() {
+        // Подгружаем код редактора
+        const savedCode = localStorage.getItem('LMSH_Studio_Code');
+        if (savedCode) document.getElementById('source-code').value = savedCode;
+        
+        // Рендерим Ремиксы паков влево
+        renderRemixes();
+
+        // Инициализируем сохраненные вкладки чатов из LocalStorage
+        loadChatTabsFromStorage();
+    };
+
+    // АНИМАЦИИ ПЕРЕКЛЮЧЕНИЯ ПАНЕЛЕЙ (ПК И МОБИЛКИ)
+    function toggleLeftPanel() {
+        const p = document.getElementById('left-panel');
+        if (window.innerWidth <= 900) { p.classList.toggle('active-mobile'); document.getElementById('right-panel').classList.remove('active-mobile'); }
+        else p.classList.toggle('collapsed-pc');
+    }
+    function toggleRightPanel() {
+        const p = document.getElementById('right-panel');
+        if (window.innerWidth <= 900) { p.classList.toggle('active-mobile'); document.getElementById('left-panel').classList.remove('active-mobile'); }
+        else p.classList.toggle('collapsed-pc');
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('light-theme');
+        document.getElementById('theme-btn').innerText = document.body.classList.contains('light-theme') ? "НЕОН (LIGHT)" : "КОСМОС (DARK)";
+    }
+
+    // ИНЖЕКЦИЯ РЕМИКСОВ В РЕДАКТОР
+    function renderRemixes() {
+        const box = document.getElementById('remixes-box');
+        box.innerHTML = "";
+        packRemixes.forEach((r, idx) => {
+            box.innerHTML += `
+                <div class="remix-item" onclick="applyRemixCode(${idx})">
+                    <div class="remix-title"><span>${r.title}</span> ⚡</div>
+                    <div class="remix-desc">${r.desc}</div>
+                </div>`;
         });
+    }
 
-        function speakFromCache(id) { alert('Воспроизведение кэша голоса Снежинки...'); }
+    function applyRemixCode(idx) {
+        const remix = packRemixes[idx];
+        document.getElementById('source-code').value = remix.code;
+        document.getElementById('pack-name-input').value = `REMIX_${idx+1}`;
+        updatePackName(`REMIX_${idx+1}`);
+        alert(`🌌 Ремикс-структура "${remix.title}" успешно инжектирована в центральный блокнот!`);
+    }
 
-        function updatePackName(val) {
-            const fileTitle = document.getElementById('editor-file-title');
-            const formattedName = val.trim().toUpperCase().replace(/\s+/g, '_');
-            fileTitle.innerText = `SOURCE_CODE // ${formattedName}.worldpack`;
-        }
+    function updatePackName(val) {
+        document.getElementById('editor-file-title').innerText = `SOURCE_CODE // ${val.trim().toUpperCase().replace(/\s+/g, '_')}.worldpack`;
+    }
 
-        function handleStorageChange(value) {
-            if (value === 'cloud') {
-                alert("🔒 Ошибка доступа! Сеть LMSH Cloud требует защищенный аккаунт Главного инженера.\nСинхронизация отклонена.");
-                document.getElementById('storage-select').value = 'local';
+    function saveCodeToLocal() {
+        localStorage.setItem('LMSH_Studio_Code', document.getElementById('source-code').value);
+        alert("💾 Текущие данные спецификации пака сохранены в LocalStorage устройства!");
+    }
+
+    function handleStorageChange(v) { if(v==='cloud') alert("🌐 Доступ к LMSH Cloud авторизован Главным Инженером!"); }
+
+    // ДИНАМИЧЕСКИЕ СЕССИИ ВКЛАДОК ЧАТОВ ОРАКУЛА (A-LA NOTEBOOKLM)
+    function loadChatTabsFromStorage() {
+        const stored = localStorage.getItem('LMSH_Studio_Tabs');
+        if (stored) {
+            chatTabs = JSON.parse(stored);
+            const keys = Object.keys(chatTabs);
+            if(keys.length > 0) {
+                keys.forEach(k => renderTabElement(k));
+                switchChatTab(keys[0]);
+                return;
             }
         }
+        // Если ничего нет в памяти, создаем первую дефолтную вкладку
+        createNewChatTab();
+    }
 
-        function checkSpeedrun(toggle) {
-            if (toggle.checked) {
-                alert("⚠️ WARNING // КРИТИЧЕСКИЙ ЛОГ:\nВ локации 'A Better Place' обнаружен пространственный баг.");
-            }
+    function saveChatTabsToStorage() {
+        localStorage.setItem('LMSH_Studio_Tabs', JSON.stringify(chatTabs));
+    }
+
+    function createNewChatTab() {
+        const tabId = "tab_" + Date.now();
+        const tabNumber = Object.keys(chatTabs).length + 1;
+        chatTabs[tabId] = {
+            title: `Вкладка Чата ${tabNumber}`,
+            html: ""
+        };
+        saveChatTabsToStorage();
+        renderTabElement(tabId);
+        switchChatTab(tabId);
+    }
+
+    function renderTabElement(id) {
+        const container = document.getElementById('tabs-container');
+        const div = document.createElement('div');
+        div.className = 'chat-tab';
+        div.id = `el_${id}`;
+        div.setAttribute('onclick', `switchChatTab('${id}')`);
+        div.innerHTML = `💬 <span>${chatTabs[id].title}</span> <span class="close-tab-btn" onclick="closeChatTab(event, '${id}')">×</span>`;
+        container.appendChild(div);
+    }
+
+    function switchChatTab(id) {
+        if(!chatTabs[id]) return;
+        activeTabId = id;
+        
+        // Визуальное переключение стилей вкладок
+        document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+        const el = document.getElementById(`el_${id}`);
+        if(el) el.classList.add('active');
+
+        const flow = document.getElementById('chat-flow');
+        const welcome = document.getElementById('welcome-block');
+
+        flow.innerHTML = chatTabs[id].html;
+        
+        if (chatTabs[id].html.trim() === "") {
+            welcome.classList.remove('hidden');
+        } else {
+            welcome.classList.add('hidden');
+            flow.scrollTop = flow.scrollHeight;
         }
+    }
 
-        function triggerImport() { document.getElementById('import-file-input').click(); }
+    function closeChatTab(event, id) {
+        event.stopPropagation(); // Защита от переключения на закрываемую вкладку
+        
+        const el = document.getElementById(`el_${id}`);
+        if(el) el.remove();
 
-        function handleImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('source-code').value = e.target.result;
-                const cleanName = file.name.replace(/\.[^/.]+$/, "");
-                document.getElementById('pack-name-input').value = cleanName;
-                updatePackName(cleanName);
-                alert(`Файл ${file.name} загружен!`);
-            };
-            reader.readAsText(file);
+        delete chatTabs[id];
+        saveChatTabsToStorage();
+
+        const keys = Object.keys(chatTabs);
+        if(keys.length > 0) {
+            switchChatTab(keys[0]);
+        } else {
+            createNewChatTab();
         }
+    }
 
-        function exportFile() {
-            const textToSave = document.getElementById('source-code').value;
-            const packName = document.getElementById('pack-name-input').value;
-            const fileName = `${packName.trim().toUpperCase().replace(/\s+/g, '_')}.worldpack`;
-            const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
-            const downloadLink = document.createElement("a");
-            downloadLink.download = fileName;
-            downloadLink.href = window.URL.createObjectURL(blob);
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        }
+    // ЛОГИКА ОТВЕТОВ ЯДРА ОРАКУЛА 2.3
+    function checkInput() {
+        const btn = document.getElementById('send-btn');
+        btn.classList.toggle('active', document.getElementById('user-input').value.trim().length > 0);
+    }
 
-        function saveToLocalStorage() {
-            const code = document.getElementById('source-code').value;
-            localStorage.setItem('LMSH_Current_Pack_Code', code);
-            alert("💾 Сохранено в LocalStorage!");
-        }
+    function handleKeyPress(e) { if(e.key === 'Enter') sendMsg(); }
 
-        function switchModel(value) {
-            const desc = document.getElementById('model-description');
-            const counter = document.getElementById('model-counter');
-            if (value === 'normal') {
-                desc.innerText = "Она не может внедрять ничего в код, но может помогать.";
-                counter.style.display = "none";
-            } else if (value === 'ideas') {
-                desc.innerText = "40 попыток на генерацию кода, идеи в день.";
-                counter.style.display = "block";
-                document.getElementById('attempts-count').innerText = "0";
-                alert("🔑 Требуется авторизация через LMSH Cloud.");
-            }
-        }
+    function getOracleResponse(text, character) {
+        const lower = text.toLowerCase();
+        const chars = { lamirk: "🛠️ Ламирк", murzik: "🐾 Мурзик", khakhmi: "🎤 Хахми", snezhinka: "❄️ Снежинка" };
+        const name = chars[character] || chars.lamirk;
 
-        function handleOracleChat(event) {
-            if (event.key === 'Enter') {
-                const input = document.getElementById('user-in');
-                const chatFlow = document.getElementById('chat-flow');
-                if (!input.value.trim()) return;
+        if (text.includes("🔑)")) return `${name}: Ключ реального запуска подтвержден. Аудио-шлюз подкаста NotebookLM взломан и активен!`;
+        if (lower.includes("room 1") || lower.includes("комната 1")) return `${name}: Лог ремикса Room 1: Инверсия спектра. Люми летит.`;
+        if (lower.includes("room 2") || lower.includes("комната 2")) return `${name}: Лог ремикса Room 2: ClickDetector датчики взведены на нажатия автоматики.`;
+        if (lower.includes("трещина") || lower.includes("лента") || lower.includes("room 5")) return `${name}: Авария цепи светодиодов! 8 свечей горят за разрывом.`;
+        if (lower.includes("контролировать") || lower.includes("фраза")) return `🔮 ЯДРО: Запись объекта Люми: «В любом случае я смогу себя контролировать». Выход на 1 NEON LEVEL.`;
+        
+        return `${name}: Ремикс пака обработан. Ядро v2.3 держит стабильный поток сессии во вкладке.`;
+    }
 
-                const userMsg = document.createElement('div');
-                userMsg.className = 'msg';
-                userMsg.style.borderLeft = '3px solid var(--accent-cyan)';
-                userMsg.innerText = input.value;
-                chatFlow.appendChild(userMsg);
+    function sendMsg() {
+        const inp = document.getElementById('user-input');
+        const val = inp.value.trim();
+        if(!val || !activeTabId) return;
 
-                setTimeout(() => {
-                    const aiMsg = document.createElement('div');
-                    aiMsg.className = 'msg ai-msg';
-                    aiMsg.innerText = "Оракул 2.0 собирает данные. Лог отправлен на анализ Снежинке.";
-                    chatFlow.appendChild(aiMsg);
-                    chatFlow.scrollTop = chatFlow.scrollHeight;
-                }, 800);
+        document.getElementById('welcome-block').classList.add('hidden');
+        appendMessage(val, 'user-msg');
+        inp.value = "";
+        checkInput();
 
-                input.value = '';
-            }
-        }
-    </script>
+        setTimeout(() => {
+            const voice = document.getElementById('voice-select').value;
+            let reply = getOracleResponse(val, voice);
+            appendMessage(reply, 'ai-msg');
+
+            // Запись конкретно в HTML текущей активной вкладки
+            chatTabs[activeTabId].html = document.getElementById('chat-flow').innerHTML;
+            saveChatTabsToStorage();
+        }, 400);
+    }
+
+    function appendMessage(text, type) {
+        const flow = document.getElementById('chat-flow');
+        const d = document.createElement('div'); d.className = 'msg ' + type;
+        d.innerHTML = text; flow.appendChild(d); flow.scrollTop = flow.scrollHeight;
+    }
+</script>
 </body>
 </html>
