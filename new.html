@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Notepad Helper | Prestige HQ</title>
+    <meta name="theme-color" content="#0a0b10">
+    <style>
+        :root {
+            --bg: #0a0b10;
+            --surface: #14151f;
+            --surface-variant: #1f202e;
+            --on-surface: #e3e2e6;
+            --on-surface-variant: #c7c6ca;
+            --primary: #adc6ff;
+            --primary-container: #254487;
+            --on-primary-container: #d9e2ff;
+            --secondary: #e8bbf1;
+            --border: #434753;
+            --grad: linear-gradient(90deg, #02b6ed 0%, #e60ced 100%);
+            --radius-large: 28px;
+            --radius-medium: 16px;
+            --radius-small: 12px;
+            --transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        body.light-theme {
+            --bg: #f8f9ff;
+            --surface: #f0f1f9;
+            --surface-variant: #e1e2ec;
+            --on-surface: #1a1b20;
+            --on-surface-variant: #43474e;
+            --primary: #3b5ba9;
+            --primary-container: #d9e2ff;
+            --on-primary-container: #001947;
+            --secondary: #74547e;
+            --border: #c3c6cf;
+        }
+
+        body.light-theme .user-msg { color: #fff; }
+        ::-webkit-scrollbar { width: 6px; background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--on-surface); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; transition: background 0.3s ease; }
+        body { display: flex; flex-direction: column; height: 100vh; }
+
+        header { background-color: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .nav-logo-text { font-weight: 800; font-size: 15px; letter-spacing: 1px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
+        
+        .menu-trigger-btn { background: var(--surface-variant); border: none; color: var(--primary); padding: 8px 14px; border-radius: var(--radius-small); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .menu-trigger-btn:hover { background: var(--primary-container); color: var(--on-primary-container); transform: translateY(-1px); }
+        .purple-trigger { color: var(--secondary) !important; }
+
+        .avatar { width: 34px; height: 34px; background: var(--grad); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 14px; box-shadow: 0 0 10px rgba(2, 182, 237, 0.3); }
+        .main-container { display: flex; flex: 1; overflow: hidden; position: relative; animation: boot 0.5s cubic-bezier(0.2, 0, 0, 1); }
+
+        aside { width: 320px; background-color: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; transition: var(--transition); z-index: 10; }
+        #right-panel { border-right: none; border-left: 1px solid var(--border); }
+        aside.collapsed-pc { width: 0px !important; padding: 0px !important; border: none !important; opacity: 0; pointer-events: none; }
+
+        .panel-header { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; border-left: 4px solid var(--secondary); padding-left: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: var(--surface-variant); border: 1px solid var(--border); border-radius: var(--radius-medium); padding: 14px; margin-bottom: 15px; }
+        .meta-input, .meta-select { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--on-surface); padding: 8px 12px; border-radius: var(--radius-small); font-size: 13px; outline: none; }
+
+        .remix-item { background: var(--surface-variant); border: 1px solid var(--border); border-radius: var(--radius-small); padding: 12px; margin-bottom: 8px; font-size: 13px; cursor: pointer; transition: var(--transition); }
+        .remix-item:hover { border-color: var(--secondary); background: rgba(232, 187, 241, 0.05); }
+        .remix-title { font-weight: bold; color: var(--secondary); margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .remix-desc { font-size: 11px; color: var(--on-surface-variant); line-height: 1.4; }
+
+        .action-btn { display: block; padding: 10px; background: var(--surface-variant); color: var(--primary); border-radius: var(--radius-small); font-weight: 700; font-size: 11px; text-transform: uppercase; text-align: center; transition: var(--transition); cursor: pointer; border: 1px solid var(--border); width: 100%; }
+        .action-btn:hover { background: var(--primary-container); color: var(--on-primary-container); }
+        .save-btn { background: var(--grad); color: white !important; border: none; }
+
+        .center-code-block { flex: 1; display: flex; flex-direction: column; background: #05060a; z-index: 1; transition: var(--transition); }
+        .editor-header { background: var(--surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        #source-code { flex: 1; background: transparent; border: none; color: #39ff14; padding: 20px; font-family: 'Courier New', Courier, monospace; font-size: 14px; resize: none; outline: none; line-height: 1.6; }
+
+        .chat-tabs-container { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .chat-tab { background: var(--surface-variant); border: 1px solid var(--border); color: var(--on-surface-variant); padding: 6px 12px; border-radius: var(--radius-small); font-size: 11px; font-weight: bold; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .chat-tab.active { background: var(--primary-container); border-color: var(--primary); color: var(--on-primary-container); }
+        .close-tab-btn { color: #ff5252; cursor: pointer; font-weight: bold; font-size: 10px; margin-left: 4px; }
+
+        #chat-screen { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; height: 100%; }
+        .chat-flow-box { flex-grow: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .welcome-zone { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; gap: 12px; padding: 15px; transition: var(--transition); text-align: center; }
+        .welcome-zone.hidden { display: none; }
+        .blob-container { position: relative; width: 110px; height: 40px; background: #000; filter: blur(5px) contrast(15); overflow: hidden; border-radius: var(--radius-large); }
+        .blob { position: absolute; width: 18px; height: 18px; border-radius: 50%; }
+        .cyan-blob { background: #02b6ed; left: 24px; animation: mergeLeft 5s infinite ease-in-out; }
+        .purple-blob { background: #e60ced; right: 24px; animation: mergeRight 5s infinite ease-in-out; }
+
+        .msg { padding: 10px 14px; font-size: 13px; max-width: 85%; line-height: 1.4; animation: slideIn 0.2s cubic-bezier(0, 0, 0.2, 1); word-wrap: break-word; }
+        .ai-msg { background: var(--surface-variant); color: var(--on-surface); align-self: flex-start; border-radius: 4px 16px 16px 16px; border: 1px solid var(--border); }
+        .user-msg { background: var(--grad); color: #fff; align-self: flex-end; font-weight: 500; border-radius: 16px 4px 16px 16px; }
+        .input-box { padding: 10px; display: flex; gap: 8px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border); align-items: center; }
+        #user-input { flex: 1; background: var(--surface-variant); border: 1px solid var(--border); border-radius: var(--radius-medium); padding: 10px 14px; color: var(--on-surface); outline: none; font-size: 13px; }
+        .send-btn { background: var(--grad); border: none; border-radius: var(--radius-medium); width: 42px; height: 38px; color: white; cursor: pointer; font-size: 14px; transition: var(--transition); opacity: 0; transform: scale(0.85); pointer-events: none; display: flex; align-items: center; justify-content: center; }
+        .send-btn.active { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+        .io-stream-container { background: var(--surface-variant); border: 2px solid var(--secondary); border-radius: var(--radius-medium); overflow: hidden; display: flex; flex-direction: column; margin-top: auto; }
+        .audio-link-body { padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .launch-btn { background: var(--grad); color: #fff; border: none; padding: 8px 14px; border-radius: var(--radius-small); font-weight: bold; font-size: 11px; cursor: pointer; }
+
+        @media (max-width: 900px) {
+            .main-container { flex-direction: column; }
+            aside { position: absolute; top: 0; bottom: 0; width: 290px !important; height: 100%; z-index: 90; display: flex !important; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+            #left-panel { left: 0; transform: translateX(-100%); }
+            #right-panel { right: 0; transform: translateX(100%); }
+            aside.active-mobile { transform: translateX(0) !important; }
+        }
+        @keyframes boot { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <button class="menu-trigger-btn purple-trigger" onclick="toggleLeftPanel()">🧬 Ремиксы</button>
+            <span class="nav-logo-text">Notepad Helper | Prestige HQ</span>
+            <button class="menu-trigger-btn" onclick="toggleRightPanel()">🔮 Оракул Чаты</button>
+        </div>
+        <div class="user-profile"><div class="avatar">🛠️</div></div>
+    </header>
+    <div class="main-container">
+        <aside id="left-panel">
+            <div class="panel-header">Конфигурация Хаба</div>
+            <div class="card"><input type="text" id="pack-name-input" class="meta-input" value="REAL_START" oninput="updatePackName(this.value)"></div>
+            <div class="panel-header">Генератор Ремиксов 🌌</div>
+            <div id="remixes-box" style="flex: 1; overflow-y: auto;"></div>
+            <button class="action-btn" onclick="toggleTheme()" id="theme-btn" style="margin-top: 10px;">Сменить Слой Ядра</button>
+        </aside>
+        <main class="center-code-block">
+            <div class="editor-header">
+                <span id="editor-file-title" style="font-size: 11px; color: var(--on-surface-variant); font-weight: bold; font-family: monospace;">SOURCE_CODE // REAL_START.worldpack</span>
+                <button class="action-btn save-btn" onclick="saveCodeToLocal()">💾 Сохранить в Кэш</button>
+            </div>
+            <textarea id="source-code" spellcheck="false">{
+    "worldPackGUID": "LMSH-34-VOID",
+    "height": -93.9,
+    "status": "Active Core",
+    "remixAllowed": true
+}</textarea>
+        </main>
+        <aside id="right-panel">
+            <div id="chat-screen">
+                <div class="panel-header">
+                    <span>Потоки Оракула 2.3</span>
+                    <button onclick="createNewChatTab()" style="background: var(--surface-variant); border: 1px solid var(--border); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;">+ Новая вкладка</button>
+                </div>
+                <div class="chat-tabs-container" id="tabs-container"></div>
+                <div id="welcome-block" class="welcome-zone">
+                    <div class="blob-container"><div class="blob cyan-blob"></div><div class="blob purple-blob"></div></div>
+                    <h1>Что делаешь?</h1>
+                </div>
+                <div id="chat-flow" class="chat-flow-box"></div>
+                <div class="input-box">
+                    <input type="text" id="user-input" placeholder="Запрос к ядру ЛМСХ..." oninput="checkInput()" onkeypress="handleKeyPress(event)">
+                    <button id="send-btn" class="send-btn" onclick="sendMsg()">➔</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+    <script>
+        const packRemixes = [
+            { title: "⚡ Remixed: Room 1", desc: "Гравитация = 0. Парящая Люми.", code: '{"room": "Room 1", "gravity": 0}' },
+            { title: "🐾 Remixed: Room 2", desc: "ClickDetector датчики.", code: '{"room": "Room 2", "sensors": "Active"}' }
+        ];
+        let chatTabs = {}, activeTabId = null;
+        window.onload = () => { renderRemixes(); loadChatTabsFromStorage(); };
+        function toggleLeftPanel() { document.getElementById('left-panel').classList.toggle('collapsed-pc'); }
+        function toggleRightPanel() { document.getElementById('right-panel').classList.toggle('collapsed-pc'); }
+        function toggleTheme() { document.body.classList.toggle('light-theme'); }
+        function renderRemixes() {
+            const box = document.getElementById('remixes-box');
+            packRemixes.forEach((r, i) => box.innerHTML += `<div class="remix-item" onclick="applyRemixCode(${i})"><div class="remix-title">${r.title}</div><div class="remix-desc">${r.desc}</div></div>`);
+        }
+        function applyRemixCode(i) { document.getElementById('source-code').value = packRemixes[i].code; }
+        function updatePackName(v) { document.getElementById('editor-file-title').innerText = `SOURCE_CODE // ${v.toUpperCase()}.worldpack`; }
+        function saveCodeToLocal() { localStorage.setItem('LMSH_Studio_Code', document.getElementById('source-code').value); alert("Сохранено!"); }
+        function loadChatTabsFromStorage() { createNewChatTab(); }
+        function createNewChatTab() { const id = "tab_" + Date.now(); chatTabs[id] = { title: "Чат", html: "" }; renderTabElement(id); switchChatTab(id); }
+        function renderTabElement(id) { document.getElementById('tabs-container').innerHTML += `<div class="chat-tab" id="el_${id}" onclick="switchChatTab('${id}')">💬 Чат</div>`; }
+        function switchChatTab(id) { activeTabId = id; document.getElementById('chat-flow').innerHTML = chatTabs[id].html; document.getElementById('welcome-block').classList.toggle('hidden', chatTabs[id].html !== ""); }
+        function checkInput() { document.getElementById('send-btn').classList.toggle('active', document.getElementById('user-input').value.length > 0); }
+        function handleKeyPress(e) { if(e.key === 'Enter') sendMsg(); }
+        function sendMsg() {
+            const inp = document.getElementById('user-input');
+            const val = inp.value;
+            if(!val) return;
+            document.getElementById('chat-flow').innerHTML += `<div class="msg user-msg">${val}</div>`;
+            document.getElementById('welcome-block').classList.add('hidden');
+            inp.value = ""; checkInput();
+            chatTabs[activeTabId].html = document.getElementById('chat-flow').innerHTML;
+        }
+    </script>
+</body>
+</html>
