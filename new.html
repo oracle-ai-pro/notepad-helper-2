@@ -2,85 +2,30 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Prestige HQ | God Mode 3.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
-    <style>
-        :root { --bg: #0a0b10; --surface: #14151f; --primary: #adc6ff; --secondary: #e8bbf1; --grad: linear-gradient(90deg, #02b6ed, #e60ced); }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; }
-        
-        /* 1. Интро и Анимации */
-        #intro-screen { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-        .fade-out { opacity: 0; pointer-events: none; transition: 1s; }
-        
-        /* Общие компоненты */
-        .app-view { display: none; height: 100vh; flex-direction: column; }
-        .nav { padding: 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        .dashboard { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
-        .card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid #333; }
-        
-        /* 5. JSON-Конструктор (стили) */
-        .editor-zone { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        textarea { width: 100%; height: 200px; background: #000; color: #39ff14; border: 1px solid #333; padding: 10px; }
-    </style>
+    <title>Prestige HQ | Oracle Studio v3.0</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <div class="logo-area">
+            <button class="menu-trigger" onclick="togglePanel('left')">Ремиксы</button>
+            <span class="logo-text">PRESTIGE HQ</span>
+            <button class="menu-trigger" onclick="togglePanel('right')">Оракул</button>
+        </div>
+    </header>
 
-    <div id="intro-screen" onclick="launchApp()">
-        <span class="material-symbols-rounded" style="font-size: 64px;">rocket_launch</span>
-        <h1>PRESTIGE HQ</h1>
-        <p>Нажми для активации ядра</p>
+    <div class="main-container">
+        <aside id="left-panel">
+            </aside>
+
+        <main class="center-block">
+            <div id="editor-header">SOURCE_CODE // CORE.worldpack</div>
+            <textarea id="source-code"></textarea>
+        </main>
+
+        <aside id="right-panel">
+            </aside>
     </div>
-
-    <div id="app" class="app-view">
-        <header class="nav">
-            <div><span class="material-symbols-rounded">apps</span> Prestige HQ v3.0</div>
-            <button onclick="createNewProject()"><span class="material-symbols-rounded">add</span> Новый Пак</button>
-        </header>
-        <main id="content-area" class="dashboard"></main>
-    </div>
-
-<script>
-    let projects = JSON.parse(localStorage.getItem('LMSH_Projects')) || [];
-
-    function launchApp() {
-        document.getElementById('intro-screen').classList.add('fade-out');
-        document.getElementById('app').style.display = 'flex';
-        renderDashboard();
-    }
-
-    // 6. Рендер дашборда
-    function renderDashboard() {
-        const area = document.getElementById('content-area');
-        area.innerHTML = projects.map((p, i) => `
-            <div class="card" onclick="editProject(${i})">
-                <h3>${p.name}</h3>
-                <p>Последнее: ${new Date(p.date).toLocaleDateString()}</p>
-                <button onclick="event.stopPropagation(); deleteProject(${i})">Удалить</button>
-            </div>
-        `).join('');
-    }
-
-    // 5. Конструктор (логика создания)
-    function createNewProject() {
-        const name = prompt("Имя комнаты/мира:");
-        if(name) {
-            projects.push({ name, date: Date.now(), content: "{}", notes: "" });
-            localStorage.setItem('LMSH_Projects', JSON.stringify(projects));
-            renderDashboard();
-        }
-    }
-
-    // 7. Контекст-Кипер (Заметки) - переход к редактору
-    function editProject(idx) {
-        alert("Открываю: " + projects[idx].name + ". Вспомни план: " + (projects[idx].notes || "Заметок нет"));
-    }
-
-    function deleteProject(i) {
-        projects.splice(i, 1);
-        localStorage.setItem('LMSH_Projects', JSON.stringify(projects));
-        renderDashboard();
-    }
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
