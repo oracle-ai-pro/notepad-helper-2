@@ -10,8 +10,17 @@ function save() {
 }
 
 function add(type) {
-    currentForm.fields.push({ id: Date.now(), type, label: 'Новый вопрос' });
-    render('конструктор');
+    // Создаем объект строго по структуре
+    const newField = { 
+        id: Date.now(), 
+        type: type, 
+        label: 'Новый вопрос' 
+    };
+    
+    currentForm.fields.push(newField); // Добавляем в массив
+    save(); // Сразу сохраняем в localStorage
+    render('конструктор'); // Перерисовываем
+}
 }
 
 function removeField(id) {
@@ -21,16 +30,21 @@ function removeField(id) {
 
 function render(view) {
     const app = document.getElementById('app');
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    
-    if(view === 'конструктор') {
-        app.innerHTML = currentForm.fields.map((f, i) => `
-            <div class="field-card">
-                <input value="${f.label}" style="background:transparent; border:none; color:white; flex-grow:1" onchange="currentForm.fields[${i}].label = this.value">
-                <span class="material-symbols-rounded" style="cursor:pointer" onclick="removeField(${f.id})">delete</span>
-            </div>
-        `).join('');
-    } else if(view === 'настройки') {
-        app.innerHTML = `<h3>Настройки корпорации</h3><textarea oninput="currentForm.description = this.value">${currentForm.description}</textarea>`;
+    app.innerHTML = ''; // Полная очистка перед перерисовкой
+
+    if (view === 'конструктор') {
+        currentForm.fields.forEach((field, index) => {
+            const card = document.createElement('div');
+            card.className = 'field-card';
+            // Используем уникальные типы из твоего меню
+            card.innerHTML = `
+                <div style="flex-grow:1">
+                    <input value="${field.label}" onchange="currentForm.fields[${index}].label = this.value" style="background:transparent; border:none; color:#fff; font-weight:bold;">
+                    <small style="display:block; color:#666">${field.type.toUpperCase()}</small>
+                </div>
+                <span class="material-symbols-rounded" style="cursor:pointer" onclick="removeField(${index})">delete</span>
+            `;
+            app.appendChild(card);
+        });
     }
 }
