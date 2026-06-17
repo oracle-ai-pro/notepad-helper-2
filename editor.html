@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактор формы</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <style>
+        body { background: #050505; color: white; margin: 0; display: flex; height: 100vh; font-family: sans-serif; }
+        
+        /* Боковая панель */
+        .sidebar { width: 300px; background: #121212; padding: 20px; border-right: 1px solid #333; }
+        .sidebar h3 { font-size: 14px; color: #888; text-transform: uppercase; margin-top: 30px; }
+        .tool-btn { display: flex; align-items: center; gap: 10px; width: 100%; background: #1a1a1a; border: none; color: white; padding: 12px; margin: 5px 0; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .tool-btn:hover { background: #333; }
+
+        /* Рабочая область */
+        .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
+        .field-card { background: #121212; padding: 20px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; }
+        .material-symbols-rounded { font-variation-settings: 'FILL' 1, 'wght' 700; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Редактор</h2>
+        <h3>Элементы</h3>
+        <button class="tool-btn" onclick="addField('text')"><span class="material-symbols-rounded">text_fields</span> Текстовое поле</button>
+        <button class="tool-btn" onclick="addSection()"><span class="material-symbols-rounded">view_agenda</span> Добавить Раздел</button>
+        <button class="tool-btn" onclick="addField('image')"><span class="material-symbols-rounded">image</span> Загрузить Изображение</button>
+        <button class="tool-btn" onclick="addField('explanation')"><span class="material-symbols-rounded">info</span> Текст-объяснение</button>
+    </div>
+
+    <div class="main-content">
+        <h1 id="form-title">Название</h1>
+        <div id="fields-area"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        let forms = JSON.parse(localStorage.getItem('lmsh_forms') || '[]');
+        let currentForm = forms.find(f => f.id === id);
+
+        function render() {
+            const area = document.getElementById('fields-area');
+            area.innerHTML = '';
+            currentForm.fields.forEach((f, index) => {
+                area.innerHTML += `
+                    <div class="field-card">
+                        <strong>Тип: ${f.type}</strong>
+                        <p>${f.label || 'Новый элемент'}</p>
+                    </div>`;
+            });
+        }
+
+        function addField(type) {
+            currentForm.fields.push({ type, label: 'Новое поле' });
+            saveAndRender();
+        }
+
+        function addSection() {
+            currentForm.fields.push({ type: 'section', label: '--- Новый раздел ---' });
+            saveAndRender();
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('lmsh_forms', JSON.stringify(forms));
+            render();
+        }
+
+        // Инициализация
+        if (currentForm) {
+            document.getElementById('form-title').innerText = currentForm.title;
+            render();
+        }
+    </script>
+</body>
+</html>
