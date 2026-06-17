@@ -1,0 +1,23 @@
+{
+  "id": "form_1781722169420",
+  "title": "Новая форма ЛМСХ",
+  "theme": "dark",
+  "fields": [
+    {
+      "id": "field_1",
+      "type": "text",
+      "label": "Ваш email",
+      "rules": {
+        "enabled": true,
+        "validationType": "email",
+        "errorText": "Введите корректный адрес!",
+        "placeholder": "example@lmsh.com"
+      }
+    },
+    {
+      "id": "field_2",
+      "type": "section",
+      "label": "Технический блок"
+    }
+  ]
+}
